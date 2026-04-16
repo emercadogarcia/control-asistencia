@@ -1,24 +1,19 @@
 version: '3.9'
-
 services:
   app:
     build: .
     container_name: laravel_asistencia
+    volumes:
+      - .:/workspace # Cambiado para que use la raíz actual
+    environment:
+      - APP_ENV=development
     ports:
       - "8000:8000"
       - "5173:5173"
-      - "9003:9003"
-    volumes:
-      - ..:/workspace
-      - /workspace/storage
-      - /workspace/bootstrap/cache
-    environment:
-      - APP_ENV=development
-      - APP_DEBUG=true
-      # Base de datos: Usar variables de .env para Supabase
+    # Esto mantiene el servidor de Laravel corriendo automáticamente
+    command: php artisan serve --host=0.0.0.0 --port=8000
     networks:
       - laravel_net
-    command: php-fpm
 
 networks:
   laravel_net:

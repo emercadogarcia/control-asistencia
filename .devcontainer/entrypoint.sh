@@ -1,38 +1,18 @@
 #!/bin/bash
+set -e
 
-# Script para ejecutar Laravel dev en el contenedor
+echo "🚀 Iniciando servicios para el Sistema de Asistencia..."
 
-# Esperar a que PostgreSQL esté disponible
-echo "⏳ Esperando a PostgreSQL..."
-until pg_isready -h db -U postgres >/dev/null 2>&1; do
-  sleep 2
-done
-echo "✅ PostgreSQL disponible"
+# En lugar de esperar a un host 'db' local, solo verificamos si hay conexión 
+# si decides usar una DB local. Para Supabase, Laravel lo gestionará al conectar.
 
-# Ejecutar migraciones si no existen
-echo "🗄️  Ejecutando migraciones..."
-php artisan migrate --force 2>/dev/null || true
-
-# Iniciar servicios en paralelo
-echo "🚀 Iniciando servicios..."
-
-# PHP-FPM ya está ejecutándose
-
-# Iniciar Laravel server
-echo "📦 Iniciando Laravel server en puerto 8000..."
+# Iniciar Laravel server en segundo plano
 php artisan serve --host=0.0.0.0 --port=8000 &
 LARAVEL_PID=$!
 
-# Iniciar Vite server
-echo "⚡ Iniciando Vite en puerto 5173..."
+# Iniciar Vite (Frontend Vue 3) en segundo plano
 npm run dev &
 VITE_PID=$!
 
-echo ""
-echo "✅ Servidores iniciados:"
-echo "   Laravel: http://localhost:8000"
-echo "   Vite: http://localhost:5173"
-echo ""
-
-# Mantener los procesos activos
+echo "✅ Servidores listos para el desarrollo."
 wait

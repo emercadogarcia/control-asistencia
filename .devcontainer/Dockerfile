@@ -1,35 +1,26 @@
 FROM php:8.3-fpm
-
-# Actualizar e instalar dependencias del sistema
+# Dependencias del sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl git zip unzip \
-    libssl-dev libonig-dev libxml2-dev libzip-dev \
-    supervisor nano wget \
+    curl git zip unzip libpng-dev libonig-dev libxml2-dev libzip-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensiones PHP necesarias para Laravel
-RUN docker-php-ext-install \
-    bcmath ctype fileinfo json mbstring \
-    pdo pdo_mysql tokenizer xml
+# Extensiones PHP (Corregido: ctype y json ya vienen en el core de PHP 8.3)
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-RUN docker-php-ext-enable mbstring
-
-# Instalar y configurar Xdebug
+# Instalar dependencias para PostgreSQL y herramientas de red
+RUN apt-get update && apt-get install -y libpq-dev postgresql-client \
+    && docker-php-ext-install pdo_pgsql
+    
+# Xdebug
 RUN pecl install xdebug && docker-php-ext-enable xdebug
-RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.discover_client_host=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-# Instalar Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin
+# Composer (Corregido el comando de instalación) [cite: 3]
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Instalar Node.js 20 y npm
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
-
-# Copiar configuración de PHP
-COPY php.ini /usr/local/etc/php/conf.d/docker-php.ini
+# Node.js 20 [cite: 4]
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
 WORKDIR /workspace
+
 EXPOSE 8000 5173 9003
