@@ -9,10 +9,26 @@
         "laravel.laravel-extra-intellisense",
         "amiralizadeh.laravel-blade",
         "Vue.volar",
-        "bradlc.vscode-tailwindcss"
+        "bradlc.vscode-tailwindcss",
+        "xdebug.php-debug",
+        "ms-azuretools.vscode-docker"
       ]
     }
   },
   "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
-  "forwardPorts": [8000, 5173]
+  "forwardPorts": [8000, 5173, 9003],
+  "portsAttributes": {
+    "8000": {
+      "label": "Laravel Server",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Vite Dev Server",
+      "onAutoForward": "notify"
+    },
+    "9003": {
+      "label": "Xdebug",
+      "onAutoForward": "notify"
+    }
+  }
 }

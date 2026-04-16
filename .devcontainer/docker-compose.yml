@@ -1,4 +1,5 @@
-version: '3.8'
+version: '3.9'
+
 services:
   app:
     build: .
@@ -6,13 +7,18 @@ services:
     ports:
       - "8000:8000"
       - "5173:5173"
+      - "9003:9003"
     volumes:
       - ..:/workspace
+      - /workspace/storage
+      - /workspace/bootstrap/cache
     environment:
       - APP_ENV=development
       - APP_DEBUG=true
+      # Base de datos: Usar variables de .env para Supabase
     networks:
       - laravel_net
+    command: php-fpm
 
 networks:
   laravel_net:
