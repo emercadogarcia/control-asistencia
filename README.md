@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 📋 Sistema de Control de Asistencia Laboral
 
 ## Descripción
@@ -73,3 +74,7 @@ control-asistencia/
 ---
 
 **¡Proyecto listo para usar! 🎉**
+=======
+# control-asistencia
+Registro de control asistencia de personal
+>>>>>>> 021243247bef22dc57efc9a2e66bb5bfaa51ef0f
