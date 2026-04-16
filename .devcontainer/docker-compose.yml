@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    container_name: laravel_asistencia
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    volumes:
+      - ..:/workspace
+    environment:
+      - APP_ENV=development
+      - APP_DEBUG=true
+    networks:
+      - laravel_net
+
+networks:
+  laravel_net:
+    driver: bridge
