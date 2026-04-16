@@ -1,0 +1,149 @@
+#!/bin/bash
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Project root
+PROJECT_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+
+# Help function
+show_help() {
+    cat << EOF
+${BLUE}Control de Asistencia - Dev Helper${NC}
+
+Uso: $(basename "$0") [comando] [argumentos]
+
+${GREEN}Comandos disponibles:${NC}
+
+  ${BLUE}Frontend${NC}
+    dev              Inicia el servidor de desarrollo de Vite
+    build            Compila assets para producción
+
+  ${BLUE}Backend${NC}
+    serve            Inicia el servidor de desarrollo de Laravel
+    tinker           Abre el shell interactivo de Laravel
+
+  ${BLUE}Base de datos${NC}
+    migrate          Ejecuta todas las migraciones pendientes
+    migrate:fresh    Resetea BD y ejecuta migraciones
+    migrate:seed     Ejecuta migraciones + seeds
+
+  ${BLUE}Composer / PHP${NC}
+    composer:install Instala dependencias de Composer
+    composer:update  Actualiza dependencias
+
+  ${BLUE}npm / JavaScript${NC}
+    npm:install      Instala dependencias de npm
+    npm:update       Actualiza dependencias
+
+  ${BLUE}Docker${NC}
+    docker:build     Reconstruye la imagen Docker
+    docker:down      Detiene los contenedores
+    docker:logs      Muestra los logs de Docker
+
+  ${BLUE}Utilidades${NC}
+    help             Muestra este mensaje de ayuda
+    status           Muestra el estado de los servicios
+
+${YELLOW}Ejemplos:${NC}
+  $(basename "$0") dev              # Inicia Vite dev server
+  $(basename "$0") serve            # Inicia Laravel dev server
+  $(basename "$0") migrate          # Ejecuta migraciones
+
+EOF
+}
+
+# Main command handling
+case "${1}" in
+    dev)
+        echo -e "${BLUE}Iniciando servidor de desarrollo Vite...${NC}"
+        cd "$PROJECT_ROOT"
+        npm run dev
+        ;;
+    build)
+        echo -e "${BLUE}Compilando assets...${NC}"
+        cd "$PROJECT_ROOT"
+        npm run build
+        ;;
+    serve)
+        echo -e "${BLUE}Iniciando servidor Laravel...${NC}"
+        cd "$PROJECT_ROOT"
+        php artisan serve --host=0.0.0.0 --port=8000
+        ;;
+    tinker)
+        echo -e "${BLUE}Abriendo Laravel Tinker...${NC}"
+        cd "$PROJECT_ROOT"
+        php artisan tinker
+        ;;
+    migrate)
+        echo -e "${BLUE}Ejecutando migraciones...${NC}"
+        cd "$PROJECT_ROOT"
+        php artisan migrate
+        ;;
+    migrate:fresh)
+        echo -e "${YELLOW}⚠️  Esto eliminará toda la base de datos${NC}"
+        read -p "¿Continuar? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            cd "$PROJECT_ROOT"
+            php artisan migrate:fresh
+        fi
+        ;;
+    migrate:seed)
+        echo -e "${BLUE}Ejecutando migraciones + seeds...${NC}"
+        cd "$PROJECT_ROOT"
+        php artisan migrate:fresh --seed
+        ;;
+    composer:install)
+        echo -e "${BLUE}Instalando dependencias de Composer...${NC}"
+        cd "$PROJECT_ROOT"
+        composer install
+        ;;
+    composer:update)
+        echo -e "${BLUE}Actualizando dependencias de Composer...${NC}"
+        cd "$PROJECT_ROOT"
+        composer update
+        ;;
+    npm:install)
+        echo -e "${BLUE}Instalando dependencias de npm...${NC}"
+        cd "$PROJECT_ROOT"
+        npm install
+        ;;
+    npm:update)
+        echo -e "${BLUE}Actualizando dependencias de npm...${NC}"
+        cd "$PROJECT_ROOT"
+        npm update
+        ;;
+    docker:build)
+        echo -e "${BLUE}Reconstruyendo imagen Docker...${NC}"
+        cd "$PROJECT_ROOT/.devcontainer"
+        docker-compose build --no-cache
+        ;;
+    docker:down)
+        echo -e "${BLUE}Deteniendo contenedores...${NC}"
+        cd "$PROJECT_ROOT/.devcontainer"
+        docker-compose down
+        ;;
+    docker:logs)
+        echo -e "${BLUE}Mostrando logs Docker...${NC}"
+        cd "$PROJECT_ROOT/.devcontainer"
+        docker-compose logs -f
+        ;;
+    status)
+        echo -e "${BLUE}=== Estado de servicios ===${NC}"
+        docker ps | grep -E "laravel_asistencia|postgres" || echo "No containers running"
+        ;;
+    help|--help|-h|"")
+        show_help
+        ;;
+    *)
+        echo -e "${RED}Comando desconocido: $1${NC}"
+        echo ""
+        show_help
+        exit 1
+        ;;
+esac
