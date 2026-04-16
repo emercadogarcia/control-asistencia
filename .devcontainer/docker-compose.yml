@@ -1,10 +1,13 @@
 version: '3.9'
 services:
   app:
-    build: .
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
     container_name: laravel_asistencia
     volumes:
-      - .:/workspace # Cambiado para que use la raíz actual
+    # Mapea la raíz del proyecto (donde está tu código) al workspace del contenedor
+      - ..:/workspace
     environment:
       - APP_ENV=development
     ports:
