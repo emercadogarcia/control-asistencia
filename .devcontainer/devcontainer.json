@@ -3,6 +3,10 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
+  // --- SOLUCIÓN A TUS PERMISOS ---
+  "remoteUser": "root",
+  "updateRemoteUserUID": true,
+  // -------------------------------
   "customizations": {
     "vscode": {
       "extensions": [
@@ -15,7 +19,8 @@
       ]
     }
   },
-  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+  // Usamos el script que ya tienes definido, asegurando que tenga permisos
+  "postCreateCommand": "chmod +x .devcontainer/postCreateCommand.sh && bash .devcontainer/postCreateCommand.sh",
   "forwardPorts": [8000, 5173, 9003],
   "portsAttributes": {
     "8000": {

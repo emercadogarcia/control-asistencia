@@ -6,15 +6,16 @@ services:
       dockerfile: .devcontainer/Dockerfile
     container_name: laravel_asistencia
     volumes:
-    # Mapea la raíz del proyecto (donde está tu código) al workspace del contenedor
-      - ..:/workspace
+      # Usar ${node_modules:-..} o simplemente la ruta relativa al archivo
+      - ..:/workspace:cached 
+    # Asegúrate de mantener este comando para que el contenedor no se cierre
+    command: sleep infinity
     environment:
       - APP_ENV=development
     ports:
       - "8000:8000"
       - "5173:5173"
-    # Esto mantiene el servidor de Laravel corriendo automáticamente
-    command: php artisan serve --host=0.0.0.0 --port=8000
+      - "9003:9003"
     networks:
       - laravel_net
 

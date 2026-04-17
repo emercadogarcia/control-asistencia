@@ -73,7 +73,7 @@ CREATE TABLE tipo_personal (
     creado_el TIMESTAMPTZ DEFAULT NOW()
 );
 
-INSERT INTO tipo_personal (nombre, descripcion) VALUES
+INSERT INTO tipo_personal (nombre, descripcion, estado) VALUES
     ('Administrativo', 'Personal de administración', 1),
     ('Operativo', 'Personal operativo/producción', 1),
     ('Gerencia', 'Personal de dirección', 1),

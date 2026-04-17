@@ -4,8 +4,22 @@ set -e
 
 echo "🚀 Iniciando configuración del devcontainer..."
 
+# 1. Configuración de seguridad para Git
+git config --global --add safe.directory /workspace
+
+# 2. ESPERA ACTIVA: Esto soluciona el desfase de montaje del volumen
+echo "⏳ Esperando a que el sistema de archivos esté disponible..."
+while [ ! -f "/workspace/artisan" ]; do
+  sleep 1
+done
+
 # Navegar al directorio del workspace
 cd /workspace
+
+# --- MEJORA 3: PERMISOS Y FORMATO DE ARTISAN (Crucial para estabilidad) ---
+echo "🛠️  Corrigiendo formato y permisos de Artisan..."
+sed -i 's/\r$//' artisan
+chmod +x artisan
 
 # Crear directorio de caché de composer
 mkdir -p /root/.composer
@@ -32,7 +46,13 @@ fi
 echo "📥 Instalando dependencias de npm..."
 if [ -f "package.json" ]; then
     npm install --legacy-peer-deps
-    echo "✅ Dependencias de npm instaladas"
+    
+    # --- MEJORA 2: SOPORTE ESM PARA VITE (Evita error de require) ---
+    echo "📦 Configurando soporte ESM para el Frontend..."
+    sed -i 's/"private": true,/"private": true,\n    "type": "module",/' package.json
+    [ -f vite.config.js ] && mv vite.config.js vite.config.mjs || true
+    
+    echo "✅ Dependencias y módulos de npm configurados"
 else
     echo "⚠️ No se encontró package.json"
 fi
@@ -50,6 +70,7 @@ APP_ENV=local
 APP_DEBUG=true
 APP_KEY=
 APP_URL=http://localhost:8000
+APP_TIMEZONE=America/La_Paz
 
 DB_CONNECTION=pgsql
 DB_HOST=db
@@ -92,14 +113,15 @@ echo "✅ Cachés limpios"
 
 echo ""
 echo "════════════════════════════════════════════════════════════════"
-echo "✅ ¡Configuración completada!"
+echo "✅ ¡Configuración completada para Edgar Mercado!"
 echo "════════════════════════════════════════════════════════════════"
 echo ""
 echo "📝 Próximos pasos:"
 echo "  1. ✅ PHP, Node, Composer y npm configurados"
 echo "  2. ✅ Dependencias instaladas"
-echo "  3. Asegúrate de que .env tiene las credenciales de Supabase"
-echo "  4. Ejecuta: php artisan migrate (si es necesario)"
-echo "  5. Ejecuta en terminal 1: php artisan serve"
-echo "  6. Ejecuta en terminal 2: npm run dev"
+echo "  3. ✅ Vite configurado como Módulo (.mjs)"
+echo "  4. Asegúrate de que .env tiene las credenciales de Supabase"
+echo "  5. Ejecuta: php artisan migrate (si es necesario) y php artisan key:generate"
+echo "  6. Terminal 1: php artisan serve --host=0.0.0.0 --port=8000"
+echo "  7. Terminal 2: npm run dev"
 echo ""
