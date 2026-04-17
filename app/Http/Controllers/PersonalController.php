@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Personal;
+use App\Models\Role;
 use App\Models\Sucursal;
+use App\Models\TipoPersonal;
 use Illuminate\Http\Request;
 
 class PersonalController extends Controller
@@ -13,7 +15,7 @@ class PersonalController extends Controller
         $search = request()->input('search');
         $sucursal_id = request()->input('sucursal_id');
 
-        $query = Personal::query();
+        $query = Personal::query()->with(['sucursal', 'tipoPersonal', 'rol']);
 
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -37,7 +39,10 @@ class PersonalController extends Controller
     public function crear()
     {
         $sucursales = Sucursal::where('estado', 1)->get();
-        return view('personal.crear', compact('sucursales'));
+        $tiposPersonal = TipoPersonal::where('estado', 1)->orderBy('nombre')->get();
+        $roles = Role::where('estado', 1)->orderBy('nombre')->get();
+
+        return view('personal.crear', compact('sucursales', 'tiposPersonal', 'roles'));
     }
 
     public function guardar(Request $request)
@@ -51,7 +56,8 @@ class PersonalController extends Controller
             'direccion' => 'nullable|string',
             'fecha_nacimiento' => 'nullable|date',
             'fecha_contratacion' => 'required|date',
-            'tipo_personal' => 'required|in:empleado,supervisor,jefe',
+            'tipo_personal_id' => 'required|exists:tipo_personal,id',
+            'rol_id' => 'required|exists:roles,id',
             'sucursal_id' => 'required|exists:sucursal,id',
         ]);
 
@@ -64,7 +70,10 @@ class PersonalController extends Controller
     {
         $personal = Personal::findOrFail($id);
         $sucursales = Sucursal::where('estado', 1)->get();
-        return view('personal.editar', compact('personal', 'sucursales'));
+        $tiposPersonal = TipoPersonal::where('estado', 1)->orderBy('nombre')->get();
+        $roles = Role::where('estado', 1)->orderBy('nombre')->get();
+
+        return view('personal.editar', compact('personal', 'sucursales', 'tiposPersonal', 'roles'));
     }
 
     public function actualizar(Request $request, $id)
@@ -80,7 +89,8 @@ class PersonalController extends Controller
             'direccion' => 'nullable|string',
             'fecha_nacimiento' => 'nullable|date',
             'fecha_contratacion' => 'required|date',
-            'tipo_personal' => 'required|in:empleado,supervisor,jefe',
+            'tipo_personal_id' => 'required|exists:tipo_personal,id',
+            'rol_id' => 'required|exists:roles,id',
             'sucursal_id' => 'required|exists:sucursal,id',
         ]);
 

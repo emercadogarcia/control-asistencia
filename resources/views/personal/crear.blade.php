@@ -73,11 +73,25 @@
 
                 <div class="form-group">
                     <label>Tipo de Personal</label>
-                    <select name="tipo_personal" required>
+                    <select name="tipo_personal_id" required>
                         <option value="">Seleccionar...</option>
-                        <option value="empleado">Empleado</option>
-                        <option value="supervisor">Supervisor</option>
-                        <option value="jefe">Jefe</option>
+                        @foreach($tiposPersonal as $tipoPersonal)
+                            <option value="{{ $tipoPersonal->id }}" {{ old('tipo_personal_id') == $tipoPersonal->id ? 'selected' : '' }}>
+                                {{ $tipoPersonal->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select name="rol_id" required>
+                        <option value="">Seleccionar rol...</option>
+                        @foreach($roles as $rol)
+                            <option value="{{ $rol->id }}" {{ old('rol_id') == $rol->id ? 'selected' : '' }}>
+                                {{ ucfirst($rol->nombre) }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
 

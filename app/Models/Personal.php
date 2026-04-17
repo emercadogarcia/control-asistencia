@@ -12,7 +12,7 @@ class Personal extends Model
     protected $table = 'personal';
     protected $fillable = [
         'nombre', 'apellido', 'ci', 'email', 'telefono', 
-        'tipo_personal', 'sucursal_id', 'estado', 'direccion',
+        'tipo_personal_id', 'rol_id', 'sucursal_id', 'estado', 'direccion',
         'fecha_nacimiento', 'fecha_contratacion'
     ];
     public $timestamps = true;
@@ -23,6 +23,16 @@ class Personal extends Model
     public function sucursal()
     {
         return $this->belongsTo(Sucursal::class, 'sucursal_id');
+    }
+
+    public function tipoPersonal()
+    {
+        return $this->belongsTo(TipoPersonal::class, 'tipo_personal_id');
+    }
+
+    public function rol()
+    {
+        return $this->belongsTo(Role::class, 'rol_id');
     }
 
     public function asignacionTurnos()
