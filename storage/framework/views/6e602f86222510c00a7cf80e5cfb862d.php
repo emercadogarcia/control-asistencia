@@ -62,63 +62,64 @@
                 <h1>Calendario laboral</h1>
                 <p>Registra feriados y eventos por fecha para mantener el calendario operativo al dia.</p>
             </div>
-            <a href="{{ route('configuracion.index') }}" class="btn btn-secondary">Configuracion</a>
+            <a href="<?php echo e(route('configuracion.index')); ?>" class="btn btn-secondary">Configuracion</a>
         </div>
     </header>
 
     <main class="container page">
-        @if(session('success'))
-            <div class="alert-success">{{ session('success') }}</div>
-        @endif
+        <?php if(session('success')): ?>
+            <div class="alert-success"><?php echo e(session('success')); ?></div>
+        <?php endif; ?>
 
         <div class="layout">
             <section class="card">
-                <h2>{{ $eventoEdit ? 'Editar evento' : 'Nuevo evento' }}</h2>
-                <p>{{ $eventoEdit ? 'Actualiza el evento o feriado seleccionado.' : 'Agrega fechas relevantes para la operacion de cada sucursal.' }}</p>
+                <h2><?php echo e($eventoEdit ? 'Editar evento' : 'Nuevo evento'); ?></h2>
+                <p><?php echo e($eventoEdit ? 'Actualiza el evento o feriado seleccionado.' : 'Agrega fechas relevantes para la operacion de cada sucursal.'); ?></p>
 
-                @if(isset($errors) && $errors->any())
+                <?php if(isset($errors) && $errors->any()): ?>
                     <div class="error-box">
-                        @foreach($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div><?php echo e($error); ?></div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                <form method="POST" action="{{ $eventoEdit ? route('configuracion.calendario.actualizar', $eventoEdit->id) : route('configuracion.calendario.crear') }}">
-                    @csrf
+                <form method="POST" action="<?php echo e($eventoEdit ? route('configuracion.calendario.actualizar', $eventoEdit->id) : route('configuracion.calendario.crear')); ?>">
+                    <?php echo csrf_field(); ?>
 
                     <div class="field">
                         <label for="sucursal_id">Sucursal</label>
                         <select id="sucursal_id" name="sucursal_id">
                             <option value="">Aplica a toda la empresa</option>
-                            @foreach($sucursales as $sucursal)
-                                <option value="{{ $sucursal->id }}" {{ (string) old('sucursal_id', $eventoEdit->sucursal_id ?? '') === (string) $sucursal->id ? 'selected' : '' }}>
-                                    {{ $sucursal->nombre }}
+                            <?php $__currentLoopData = $sucursales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sucursal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($sucursal->id); ?>" <?php echo e((string) old('sucursal_id', $eventoEdit->sucursal_id ?? '') === (string) $sucursal->id ? 'selected' : ''); ?>>
+                                    <?php echo e($sucursal->nombre); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
 
                     <div class="field">
                         <label for="fecha">Fecha</label>
-                        <input id="fecha" type="date" name="fecha" value="{{ old('fecha', isset($eventoEdit) && $eventoEdit->fecha ? $eventoEdit->fecha->format('Y-m-d') : '') }}" required>
+                        <input id="fecha" type="date" name="fecha" value="<?php echo e(old('fecha', isset($eventoEdit) && $eventoEdit->fecha ? $eventoEdit->fecha->format('Y-m-d') : '')); ?>" required>
                     </div>
 
                     <div class="field">
                         <label for="descripcion">Descripcion</label>
-                        <textarea id="descripcion" name="descripcion" placeholder="Ej. Feriado nacional, reunion general o mantenimiento programado">{{ old('descripcion', $eventoEdit->descripcion ?? '') }}</textarea>
+                        <textarea id="descripcion" name="descripcion" placeholder="Ej. Feriado nacional, reunion general o mantenimiento programado"><?php echo e(old('descripcion', $eventoEdit->descripcion ?? '')); ?></textarea>
                     </div>
 
                     <label class="check-row">
-                        <input type="checkbox" name="es_feriado" value="1" {{ old('es_feriado', $eventoEdit->es_feriado ?? false) ? 'checked' : '' }}>
+                        <input type="checkbox" name="es_feriado" value="1" <?php echo e(old('es_feriado', $eventoEdit->es_feriado ?? false) ? 'checked' : ''); ?>>
                         <span>Marcar como feriado</span>
                     </label>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">{{ $eventoEdit ? 'Guardar cambios' : 'Crear evento' }}</button>
-                        @if($eventoEdit)
-                            <a href="{{ route('configuracion.calendario') }}" class="btn btn-secondary">Cancelar</a>
-                        @endif
+                        <button type="submit" class="btn btn-primary"><?php echo e($eventoEdit ? 'Guardar cambios' : 'Crear evento'); ?></button>
+                        <?php if($eventoEdit): ?>
+                            <a href="<?php echo e(route('configuracion.calendario')); ?>" class="btn btn-secondary">Cancelar</a>
+                        <?php endif; ?>
                     </div>
                 </form>
             </section>
@@ -127,15 +128,15 @@
                 <div class="metrics">
                     <div class="metric">
                         <span>Eventos registrados</span>
-                        <strong>{{ $eventos->total() }}</strong>
+                        <strong><?php echo e($eventos->total()); ?></strong>
                     </div>
                     <div class="metric">
                         <span>Feriados visibles</span>
-                        <strong>{{ $eventos->where('es_feriado', true)->count() }}</strong>
+                        <strong><?php echo e($eventos->where('es_feriado', true)->count()); ?></strong>
                     </div>
                     <div class="metric">
                         <span>Con sucursal asignada</span>
-                        <strong>{{ $eventos->filter(fn ($evento) => !empty($evento->sucursal_id))->count() }}</strong>
+                        <strong><?php echo e($eventos->filter(fn ($evento) => !empty($evento->sucursal_id))->count()); ?></strong>
                     </div>
                 </div>
 
@@ -155,25 +156,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($eventos as $evento)
+                                <?php $__empty_1 = true; $__currentLoopData = $eventos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $evento): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <tr>
-                                        <td><strong>{{ $evento->fecha ? $evento->fecha->format('d/m/Y') : 'Sin fecha' }}</strong></td>
-                                        <td>{{ $evento->descripcion ?: 'Sin descripcion' }}</td>
+                                        <td><strong><?php echo e($evento->fecha ? $evento->fecha->format('d/m/Y') : 'Sin fecha'); ?></strong></td>
+                                        <td><?php echo e($evento->descripcion ?: 'Sin descripcion'); ?></td>
                                         <td>
-                                            <span class="badge {{ $evento->es_feriado ? 'holiday' : 'event' }}">
-                                                {{ $evento->es_feriado ? 'Feriado' : 'Evento' }}
+                                            <span class="badge <?php echo e($evento->es_feriado ? 'holiday' : 'event'); ?>">
+                                                <?php echo e($evento->es_feriado ? 'Feriado' : 'Evento'); ?>
+
                                             </span>
                                         </td>
-                                        <td>{{ $evento->sucursal->nombre ?? 'General' }}</td>
+                                        <td><?php echo e($evento->sucursal->nombre ?? 'General'); ?></td>
                                         <td>
                                             <div class="actions">
-                                                <a href="{{ route('configuracion.calendario.editar', $evento->id) }}" class="icon-btn" title="Editar">
+                                                <a href="<?php echo e(route('configuracion.calendario.editar', $evento->id)); ?>" class="icon-btn" title="Editar">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                                         <path d="M4 20h4l10.5-10.5-4-4L4 16v4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
                                                         <path d="m12.5 7.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                                                     </svg>
                                                 </a>
-                                                <a href="{{ route('configuracion.calendario.eliminar', $evento->id) }}" class="icon-btn delete" title="Eliminar" onclick="return confirm('Se eliminara este evento. Deseas continuar?')">
+                                                <a href="<?php echo e(route('configuracion.calendario.eliminar', $evento->id)); ?>" class="icon-btn delete" title="Eliminar" onclick="return confirm('Se eliminara este evento. Deseas continuar?')">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                                         <path d="M4 7h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                                                         <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
@@ -184,23 +186,24 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <tr>
                                         <td colspan="5" class="empty-state">No hay eventos registrados por ahora.</td>
                                     </tr>
-                                @endforelse
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
 
                     <div style="margin-top: 16px;">
-                        {{ $eventos->appends(request()->query())->links() }}
+                        <?php echo e($eventos->appends(request()->query())->links()); ?>
+
                     </div>
                 </div>
             </section>
         </div>
 
-        <a href="{{ route('configuracion.index') }}" class="back-link">← Volver al modulo de configuracion</a>
+        <a href="<?php echo e(route('configuracion.index')); ?>" class="back-link">← Volver al modulo de configuracion</a>
     </main>
 
     <script>
@@ -208,3 +211,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH /workspace/resources/views/configuracion/calendario.blade.php ENDPATH**/ ?>

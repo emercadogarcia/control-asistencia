@@ -73,11 +73,27 @@
 
                 <div class="form-group">
                     <label>Tipo de Personal</label>
-                    <select name="tipo_personal" required>
+                    <select name="tipo_personal_id" required>
                         <option value="">Seleccionar...</option>
-                        <option value="empleado">Empleado</option>
-                        <option value="supervisor">Supervisor</option>
-                        <option value="jefe">Jefe</option>
+                        <?php $__currentLoopData = $tiposPersonal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tipoPersonal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($tipoPersonal->id); ?>" <?php echo e(old('tipo_personal_id') == $tipoPersonal->id ? 'selected' : ''); ?>>
+                                <?php echo e($tipoPersonal->nombre); ?>
+
+                            </option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select name="rol_id" required>
+                        <option value="">Seleccionar rol...</option>
+                        <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rol): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($rol->id); ?>" <?php echo e(old('rol_id') == $rol->id ? 'selected' : ''); ?>>
+                                <?php echo e(ucfirst($rol->nombre)); ?>
+
+                            </option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
 

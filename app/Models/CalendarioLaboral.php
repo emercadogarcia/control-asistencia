@@ -9,7 +9,7 @@ class CalendarioLaboral extends Model
 {
     use HasFactory;
 
-    protected $table = 'calendario_laborals';
+    protected $table = 'calendario_laboral';
     protected $fillable = ['sucursal_id', 'fecha', 'es_feriado', 'descripcion'];
     protected $casts = ['fecha' => 'date', 'es_feriado' => 'boolean'];
     public $timestamps = false;

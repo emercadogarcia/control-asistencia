@@ -11,7 +11,6 @@ class Turno extends Model
 
     protected $table = 'turno';
     protected $fillable = ['sucursal_id', 'nombre', 'hora_entrada', 'hora_salida', 'dias_semana', 'tolerancia_min', 'estado'];
-    protected $casts = ['dias_semana' => 'array'];
     public $timestamps = true;
 
     const CREATED_AT = 'creado_el';
@@ -21,6 +20,27 @@ class Turno extends Model
     public function setNombreAttribute($value)
     {
         $this->attributes['nombre'] = strtoupper($value);
+    }
+
+    public function setDiasSemanaAttribute($value)
+    {
+        if (is_array($value)) {
+            $this->attributes['dias_semana'] = '{' . implode(',', $value) . '}';
+            return;
+        }
+
+        $this->attributes['dias_semana'] = $value;
+    }
+
+    public function getDiasSemanaAttribute($value)
+    {
+        if (!$value) {
+            return [];
+        }
+
+        $trimmed = trim($value, '{}');
+
+        return $trimmed === '' ? [] : explode(',', $trimmed);
     }
 
     public function sucursal()

@@ -59,6 +59,8 @@ Route::prefix('configuracion')->group(function () {
     // Calendario Laboral
     Route::get('/calendario', [ConfiguracionController::class, 'calendario'])->name('configuracion.calendario');
     Route::post('/calendario', [ConfiguracionController::class, 'guardarEvento'])->name('configuracion.calendario.crear');
+    Route::get('/calendario/{id}/editar', [ConfiguracionController::class, 'editarEvento'])->name('configuracion.calendario.editar');
+    Route::post('/calendario/{id}', [ConfiguracionController::class, 'guardarEvento'])->name('configuracion.calendario.actualizar');
     Route::get('/calendario/{id}/eliminar', [ConfiguracionController::class, 'eliminarEvento'])->name('configuracion.calendario.eliminar');
     
     // Reset Base de Datos

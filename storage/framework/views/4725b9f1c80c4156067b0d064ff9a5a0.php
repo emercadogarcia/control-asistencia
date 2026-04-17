@@ -6,113 +6,245 @@
     <title>Turnos Laborales</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; }
-        header { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); color: white; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .section { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
-        h2 { color: #8b5cf6; margin-bottom: 20px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 500; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 4px; }
-        .btn { background: #0284c7; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; }
-        .btn-edit { background: #f59e0b; padding: 6px 12px; margin-right: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { background: #f3f4f6; padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb; }
-        td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
-        .btn-delete { background: #dc2626; padding: 6px 12px; }
-        .link-back { display: inline-block; margin-top: 10px; color: #8b5cf6; text-decoration: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }
+        header { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; }
+        .header-inner h1 { font-size: 30px; font-weight: 700; }
+        .header-inner p { color: #64748b; margin-top: 4px; }
+        .page { padding: 28px 0 40px; }
+        .layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 22px; align-items: start; }
+        .card { background: white; border: 1px solid #e2e8f0; border-radius: 20px; padding: 22px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06); }
+        .card h2 { font-size: 20px; margin-bottom: 8px; }
+        .card p { color: #64748b; }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; }
+        .field { margin-top: 16px; }
+        .field label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #334155; }
+        .field input, .field select { width: 100%; padding: 11px 13px; border: 1px solid #cbd5e1; border-radius: 14px; background: #fff; font-size: 14px; }
+        .field input:focus, .field select:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12); }
+        .days-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+        .day-option { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 12px; color: #334155; }
+        .day-option input { width: auto; }
+        .form-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 14px; border: 1px solid transparent; padding: 11px 15px; font-weight: 600; text-decoration: none; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.1); }
+        .btn-primary { background: #0f172a; color: white; }
+        .btn-secondary { background: #e2e8f0; color: #0f172a; }
+        .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+        .metric { background: white; border: 1px solid #e2e8f0; border-radius: 18px; padding: 18px; }
+        .metric span { display: block; color: #64748b; font-size: 13px; margin-bottom: 8px; }
+        .metric strong { font-size: 28px; }
+        .table-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 18px; }
+        table { width: 100%; border-collapse: collapse; min-width: 860px; background: white; }
+        th, td { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
+        th { color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; background: #f8fafc; }
+        tbody tr:hover { background: #f8fafc; }
+        .badge { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+        .badge.active { background: #dcfce7; color: #166534; }
+        .days-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .day-chip { background: #e0f2fe; color: #075985; border-radius: 999px; padding: 4px 8px; font-size: 12px; font-weight: 600; }
+        .actions { display: flex; align-items: center; gap: 8px; }
+        .icon-btn { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid #e2e8f0; background: white; color: #334155; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+        .icon-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08); }
+        .icon-btn.edit:hover { background: #f8fafc; }
+        .icon-btn.delete:hover { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+        .empty-state { text-align: center; padding: 28px; color: #64748b; }
+        .back-link { display: inline-flex; align-items: center; margin-top: 18px; color: #475569; text-decoration: none; }
+        .error-box { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; border-radius: 14px; padding: 14px 16px; margin-top: 16px; }
+        @media (max-width: 980px) {
+            .layout { grid-template-columns: 1fr; }
+            .metrics { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <header><h1>⏰ Gestión de Turnos Laborales</h1></header>
+    <header>
+        <div class="container header-inner">
+            <div>
+                <h1>Turnos laborales</h1>
+                <p>Administra horarios, tolerancia y dias de trabajo desde una sola pantalla.</p>
+            </div>
+            <a href="<?php echo e(route('configuracion.index')); ?>" class="btn btn-secondary">Configuracion</a>
+        </div>
+    </header>
 
-    <div class="container">
-        <div class="section">
-            <h2>Crear Turno</h2>
-            <form method="POST" action="<?php echo e(route('configuracion.turnos.crear')); ?>">
-                <?php echo csrf_field(); ?>
-                
-                <div class="form-group">
-                    <label>Sucursal</label>
-                    <select name="sucursal_id" required>
-                        <option value="">Seleccionar sucursal...</option>
-                        <?php $__currentLoopData = $sucursales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sucursal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($sucursal->id); ?>"><?php echo e($sucursal->nombre); ?></option>
+    <main class="container page">
+        <?php if(session('success')): ?>
+            <div class="alert-success"><?php echo e(session('success')); ?></div>
+        <?php endif; ?>
+
+        <div class="layout">
+            <section class="card">
+                <h2><?php echo e($turnoEdit ? 'Editar turno' : 'Nuevo turno'); ?></h2>
+                <p><?php echo e($turnoEdit ? 'Actualiza el horario seleccionado sin salir del modulo.' : 'Define el horario base para cada sucursal.'); ?></p>
+
+                <?php if(isset($errors) && $errors->any()): ?>
+                    <div class="error-box">
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div><?php echo e($error); ?></div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST" action="<?php echo e($turnoEdit ? route('configuracion.turnos.actualizar', $turnoEdit->id) : route('configuracion.turnos.crear')); ?>">
+                    <?php echo csrf_field(); ?>
+
+                    <div class="field">
+                        <label for="sucursal_id">Sucursal</label>
+                        <select id="sucursal_id" name="sucursal_id" required>
+                            <option value="">Seleccionar sucursal</option>
+                            <?php $__currentLoopData = $sucursales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sucursal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($sucursal->id); ?>" <?php echo e((string) old('sucursal_id', $turnoEdit->sucursal_id ?? '') === (string) $sucursal->id ? 'selected' : ''); ?>>
+                                    <?php echo e($sucursal->nombre); ?>
+
+                                </option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="nombre">Nombre del turno</label>
+                        <input id="nombre" type="text" name="nombre" value="<?php echo e(old('nombre', $turnoEdit->nombre ?? '')); ?>" placeholder="Ej. Manana, Tarde o Noche" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="hora_entrada">Hora de entrada</label>
+                        <input id="hora_entrada" type="time" name="hora_entrada" value="<?php echo e(old('hora_entrada', isset($turnoEdit) ? substr($turnoEdit->hora_entrada, 0, 5) : '')); ?>" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="hora_salida">Hora de salida</label>
+                        <input id="hora_salida" type="time" name="hora_salida" value="<?php echo e(old('hora_salida', isset($turnoEdit) ? substr($turnoEdit->hora_salida, 0, 5) : '')); ?>" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="tolerancia_min">Tolerancia en minutos</label>
+                        <input id="tolerancia_min" type="number" min="0" name="tolerancia_min" value="<?php echo e(old('tolerancia_min', $turnoEdit->tolerancia_min ?? 15)); ?>" required>
+                    </div>
+
+                    <?php
+                        $diasDisponibles = [
+                            'lun' => 'Lunes',
+                            'mar' => 'Martes',
+                            'mie' => 'Miercoles',
+                            'jue' => 'Jueves',
+                            'vie' => 'Viernes',
+                            'sab' => 'Sabado',
+                            'dom' => 'Domingo',
+                        ];
+                        $diasSeleccionados = old('dias_semana', $turnoEdit->dias_semana ?? []);
+                    ?>
+
+                    <div class="field">
+                        <label>Dias de trabajo</label>
+                        <div class="days-grid">
+                            <?php $__currentLoopData = $diasDisponibles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $clave => $etiqueta): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <label class="day-option">
+                                    <input type="checkbox" name="dias_semana[]" value="<?php echo e($clave); ?>" <?php echo e(in_array($clave, $diasSeleccionados, true) ? 'checked' : ''); ?>>
+                                    <span><?php echo e($etiqueta); ?></span>
+                                </label>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary"><?php echo e($turnoEdit ? 'Guardar cambios' : 'Crear turno'); ?></button>
+                        <?php if($turnoEdit): ?>
+                            <a href="<?php echo e(route('configuracion.turnos')); ?>" class="btn btn-secondary">Cancelar</a>
+                        <?php endif; ?>
+                    </div>
+                </form>
+            </section>
+
+            <section>
+                <div class="metrics">
+                    <div class="metric">
+                        <span>Turnos activos</span>
+                        <strong><?php echo e($turnos->total()); ?></strong>
+                    </div>
+                    <div class="metric">
+                        <span>Sucursales con turnos</span>
+                        <strong><?php echo e($turnos->pluck('sucursal_id')->filter()->unique()->count()); ?></strong>
+                    </div>
+                    <div class="metric">
+                        <span>Tolerancia promedio</span>
+                        <strong><?php echo e($turnos->count() ? round($turnos->avg('tolerancia_min')) : 0); ?> min</strong>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Nombre del Turno</label>
-                    <input type="text" name="nombre" placeholder="Ej: Mañana, Tarde, Noche" required>
+                <div class="card">
+                    <h2>Listado de turnos</h2>
+                    <p>Consulta y edita rapidamente los horarios registrados.</p>
+
+                    <div class="table-wrap" style="margin-top: 18px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Turno</th>
+                                    <th>Horario</th>
+                                    <th>Tolerancia</th>
+                                    <th>Dias</th>
+                                    <th>Sucursal</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $__empty_1 = true; $__currentLoopData = $turnos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $turno): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                    <tr>
+                                        <td><strong><?php echo e($turno->nombre); ?></strong></td>
+                                        <td><?php echo e(substr($turno->hora_entrada, 0, 5)); ?> - <?php echo e(substr($turno->hora_salida, 0, 5)); ?></td>
+                                        <td><?php echo e($turno->tolerancia_min); ?> min</td>
+                                        <td>
+                                            <div class="days-list">
+                                                <?php $__currentLoopData = ($turno->dias_semana ?? []); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dia): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <span class="day-chip"><?php echo e(strtoupper($dia)); ?></span>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            </div>
+                                        </td>
+                                        <td><?php echo e($turno->sucursal->nombre ?? 'Sin sucursal'); ?></td>
+                                        <td><span class="badge active">Activo</span></td>
+                                        <td>
+                                            <div class="actions">
+                                                <a href="<?php echo e(route('configuracion.turnos.editar', $turno->id)); ?>" class="icon-btn edit" title="Editar">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                        <path d="M4 20h4l10.5-10.5-4-4L4 16v4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                        <path d="m12.5 7.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                    </svg>
+                                                </a>
+                                                <a href="<?php echo e(route('configuracion.turnos.eliminar', $turno->id)); ?>" class="icon-btn delete" title="Dar de baja" onclick="return confirm('Se dara de baja este turno. Deseas continuar?')">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                        <path d="M4 7h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                        <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                        <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                        <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                    <tr>
+                                        <td colspan="7" class="empty-state">No hay turnos registrados por ahora.</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top: 16px;">
+                        <?php echo e($turnos->appends(request()->query())->links()); ?>
+
+                    </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Hora Entrada (HH:MM)</label>
-                        <input type="time" name="hora_entrada" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Hora Salida (HH:MM)</label>
-                        <input type="time" name="hora_salida" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tolerancia (minutos)</label>
-                        <input type="number" name="tolerancia_min" value="15" min="0">
-                    </div>
-                </div>
-                <button type="submit" class="btn">Crear Turno</button>
-            </form>
+            </section>
         </div>
 
-        <div class="section" style="margin-top: 20px;">
-            <h2>Turnos Registrados</h2>
-            <?php if($turnos->count() > 0): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Entrada</th>
-                            <th>Salida</th>
-                            <th>Tolerancia</th>
-                            <th>Sucursal</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $__currentLoopData = $turnos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $turno): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <tr>
-                                <td><strong><?php echo e($turno->nombre); ?></strong></td>
-                                <td><?php echo e($turno->hora_entrada); ?></td>
-                                <td><?php echo e($turno->hora_salida); ?></td>
-                                <td><?php echo e($turno->tolerancia_min); ?> min</td>
-                                <td><?php echo e($turno->sucursal->nombre ?? '—'); ?></td>
-                                <td>
-                                    <a href="<?php echo e(route('configuracion.turnos.editar', $turno->id)); ?>" class="btn btn-edit">Editar</a>
-                                    <button class="btn btn-delete" onclick="deleteTurno(<?php echo e($turno->id); ?>)">Eliminar</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p style="color: #999;">Sin turnos registrados</p>
-            <?php endif; ?>
-        </div>
-
-        <a href="<?php echo e(route('configuracion.index')); ?>" class="link-back">← Volver</a>
-    </div>
+        <a href="<?php echo e(route('configuracion.index')); ?>" class="back-link">← Volver al modulo de configuracion</a>
+    </main>
 
     <script>
-        const token = localStorage.getItem('auth_token');
-        if (!token) window.location.href = '/login';
-
-        function deleteTurno(id) {
-            if (!confirm('¿Eliminar turno?')) return;
-            window.location.href = `<?php echo e(url('configuracion/turnos')); ?>/${id}/eliminar`;
-        }
+        if (!localStorage.getItem('auth_token')) window.location.href = '/login';
     </script>
 </body>
 </html>
