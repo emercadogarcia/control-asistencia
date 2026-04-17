@@ -45,11 +45,14 @@ class PersonalController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
-            'ci' => 'required|string|unique:personals,ci',
-            'email' => 'required|email|unique:personals,email',
+            'ci' => 'required|string|unique:personal,ci',
+            'email' => 'required|email|unique:personal,email',
             'telefono' => 'nullable|string',
+            'direccion' => 'nullable|string',
+            'fecha_nacimiento' => 'nullable|date',
+            'fecha_contratacion' => 'required|date',
             'tipo_personal' => 'required|in:empleado,supervisor,jefe',
-            'sucursal_id' => 'required|exists:sucursals,id',
+            'sucursal_id' => 'required|exists:sucursal,id',
         ]);
 
         $personal = Personal::create($validated + ['estado' => 1]);
@@ -71,11 +74,14 @@ class PersonalController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
-            'ci' => 'required|string|unique:personals,ci,' . $id,
-            'email' => 'required|email|unique:personals,email,' . $id,
+            'ci' => 'required|string|unique:personal,ci,' . $id,
+            'email' => 'required|email|unique:personal,email,' . $id,
             'telefono' => 'nullable|string',
+            'direccion' => 'nullable|string',
+            'fecha_nacimiento' => 'nullable|date',
+            'fecha_contratacion' => 'required|date',
             'tipo_personal' => 'required|in:empleado,supervisor,jefe',
-            'sucursal_id' => 'required|exists:sucursals,id',
+            'sucursal_id' => 'required|exists:sucursal,id',
         ]);
 
         $personal->update($validated);

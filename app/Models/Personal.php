@@ -12,7 +12,8 @@ class Personal extends Model
     protected $table = 'personal';
     protected $fillable = [
         'nombre', 'apellido', 'ci', 'email', 'telefono', 
-        'tipo_personal', 'sucursal_id', 'estado', 'foto_url'
+        'tipo_personal', 'sucursal_id', 'estado', 'direccion',
+        'fecha_nacimiento', 'fecha_contratacion'
     ];
     public $timestamps = true;
 

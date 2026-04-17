@@ -91,10 +91,9 @@ CREATE TABLE personal (
     telefono VARCHAR(20),
     direccion TEXT,
     fecha_nacimiento DATE,
-    fecha_contratacion DATE NOT NULL,
+    fecha_contratacion DATE DEFAULT CURRENT_DATE,
     sucursal_id BIGINT REFERENCES sucursal(id),
-    tipo_personal_id BIGINT REFERENCES tipo_personal(id),
-    rol_id BIGINT REFERENCES roles(id),
+    tipo_personal VARCHAR(50) DEFAULT 'empleado',
     estado SMALLINT DEFAULT 1,
     creado_el TIMESTAMPTZ DEFAULT NOW(),
     actualizado_el TIMESTAMPTZ DEFAULT NOW()

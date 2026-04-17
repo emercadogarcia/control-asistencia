@@ -57,6 +57,21 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" name="direccion">
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" name="fecha_nacimiento">
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de Contratación</label>
+                    <input type="date" name="fecha_contratacion" value="{{ date('Y-m-d') }}" required>
+                </div>
+
+                <div class="form-group">
                     <label>Tipo de Personal</label>
                     <select name="tipo_personal" required>
                         <option value="">Seleccionar...</option>
