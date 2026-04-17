@@ -53,7 +53,22 @@
 
                 <div class="form-group">
                     <label>Teléfono</label>
-                    <input type="text" name="telefono" value="{{ $personal->telefono }}">
+                    <input type="text" name="telefono" value="{{ old('telefono', $personal->telefono) }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" name="direccion" value="{{ old('direccion', $personal->direccion) }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" name="fecha_nacimiento" value="{{ old('fecha_nacimiento', $personal->fecha_nacimiento) }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha de Contratación</label>
+                    <input type="date" name="fecha_contratacion" value="{{ old('fecha_contratacion', $personal->fecha_contratacion) }}" required>
                 </div>
 
                 <div class="form-group">
