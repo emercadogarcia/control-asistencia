@@ -18,4 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+     ->booted(function () {
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        }
+    })
+    ->create();
