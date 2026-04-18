@@ -2,6 +2,12 @@ FROM composer:2 AS vendor
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    git unzip libzip-dev libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql zip
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 COPY composer.json composer.lock ./
 
 RUN composer install \
