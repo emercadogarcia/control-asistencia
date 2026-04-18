@@ -67,8 +67,8 @@ RUN chmod +x /usr/local/bin/render-entrypoint.sh
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 ENV LOG_CHANNEL=stderr
-ENV PORT=10000
+ENV PORT=8080
 
-EXPOSE 10000
+EXPOSE 8080
 
 CMD ["/usr/local/bin/render-entrypoint.sh"]
