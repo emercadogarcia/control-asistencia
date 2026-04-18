@@ -47,6 +47,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev \
     libzip-dev \
     libpq-dev \
+    libonig-dev \
     zip \
     && docker-php-ext-install \
     bcmath \
