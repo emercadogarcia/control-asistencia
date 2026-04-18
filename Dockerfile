@@ -3,8 +3,8 @@ FROM php:8.3-cli AS vendor
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip
+    git unzip libzip-dev libpq-dev libpng-dev \
+    && docker-php-ext-install pdo pdo_pgsql zip gd
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
