@@ -109,7 +109,6 @@ class AsistenciaController extends Controller
                 'hora_entrada' => $ahora,
                 'estado' => $estado,
                 'ip_dispositivo' => $request->ip(),
-                'registrado_por' => auth()->id(),
             ]);
 
             return response()->json([

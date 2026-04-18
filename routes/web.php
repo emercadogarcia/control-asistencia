@@ -33,6 +33,7 @@ Route::prefix('personal')->group(function () {
     Route::get('/', [PersonalController::class, 'index'])->name('personal.index');
     Route::get('/crear', [PersonalController::class, 'crear'])->name('personal.crear');
     Route::post('/guardar', [PersonalController::class, 'guardar'])->name('personal.guardar');
+    Route::post('/{id}/asignar-turno', [PersonalController::class, 'asignarTurno'])->name('personal.asignar-turno');
     Route::get('/{id}/editar', [PersonalController::class, 'editar'])->name('personal.editar');
     Route::post('/{id}', [PersonalController::class, 'actualizar'])->name('personal.actualizar');
     Route::get('/{id}/eliminar', [PersonalController::class, 'eliminar'])->name('personal.eliminar');

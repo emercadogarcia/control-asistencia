@@ -50,16 +50,17 @@ class Personal extends Model
         return $this->nombre . ' ' . $this->apellido;
     }
 
-    public function getTurnoVigenteAttribute()
+    public function turnoVigente()
     {
-        $hoy = now();
-        return $this->asignacionTurnos()
-            ->where('fecha_inicio', '<=', $hoy->toDateString())
-            ->where(function($q) use ($hoy) {
+        $hoy = now()->toDateString();
+
+        return $this->hasOne(AsignacionTurno::class, 'personal_id')
+            ->where('estado', 1)
+            ->where('fecha_inicio', '<=', $hoy)
+            ->where(function ($q) use ($hoy) {
                 $q->whereNull('fecha_fin')
-                  ->orWhere('fecha_fin', '>=', $hoy->toDateString());
+                  ->orWhere('fecha_fin', '>=', $hoy);
             })
-            ->with('turno')
-            ->first();
+            ->latestOfMany('fecha_inicio');
     }
 }

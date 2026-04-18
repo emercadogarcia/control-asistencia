@@ -4,234 +4,77 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
     <title>Dashboard - Control de Asistencia</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }
+        header { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; }
+        .header-inner h1 { font-size: 30px; font-weight: 700; }
+        .header-copy p, .today-label { color: #64748b; margin-top: 4px; }
+        .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .page { padding: 28px 0 40px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 14px; border: 1px solid transparent; padding: 11px 15px; font-weight: 600; text-decoration: none; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.1); }
+        .btn-primary { background: #0f172a; color: white; }
+        .btn-secondary { background: #e2e8f0; color: #0f172a; }
+        .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+        .stat-card, .section, .menu-item { background: white; border: 1px solid #e2e8f0; border-radius: 20px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06); }
+        .stat-card { padding: 18px; }
+        .stat-label { display: block; color: #64748b; font-size: 13px; margin-bottom: 8px; }
+        .stat-number { font-size: 30px; font-weight: 800; }
+        .section { padding: 22px; margin-bottom: 18px; }
+        .section h2 { font-size: 20px; margin-bottom: 8px; }
+        .section p { color: #64748b; }
+        .menu-rapido { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+        .menu-item { padding: 18px; text-decoration: none; color: #0f172a; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .menu-item:hover { transform: translateY(-2px); box-shadow: 0 16px 26px rgba(15, 23, 42, 0.1); }
+        .menu-item span { display: inline-flex; width: 42px; height: 42px; align-items: center; justify-content: center; border-radius: 14px; background: #f8fafc; margin-bottom: 14px; }
+        .menu-item strong { display: block; margin-bottom: 6px; }
+        .menu-item small { color: #64748b; }
+        .table-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 18px; margin-top: 18px; }
+        table { width: 100%; border-collapse: collapse; min-width: 760px; background: white; }
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; background: #f8fafc; }
+        tbody tr:hover { background: #f8fafc; }
+        .badge { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+        .badge-presente { background: #dcfce7; color: #166534; }
+        .badge-tardanza { background: #ffedd5; color: #c2410c; }
+        .badge-ausente { background: #fee2e2; color: #991b1b; }
+        .empty-state { text-align: center; padding: 28px; color: #64748b; }
+        .hour { font-weight: 700; }
+        @media (max-width: 980px) {
+            .header-inner { flex-direction: column; align-items: flex-start; }
+            .grid, .menu-rapido { grid-template-columns: 1fr 1fr; }
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f3f4f6;
-            color: #333;
-        }
-        header {
-            background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
-            color: white;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        header h1 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .header-right {
-            float: right;
-            display: flex;
-            gap: 15px;
-            margin-top: -30px;
-        }
-        .header-right a, .header-right button {
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-size: 13px;
-        }
-        .header-right a:hover, .header-right button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .fecha-hoy {
-            color: rgba(255,255,255,0.9);
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid #0284c7;
-            text-align: center;
-        }
-        .stat-card.presente {
-            border-left-color: #16a34a;
-        }
-        .stat-card.tardanza {
-            border-left-color: #ea580c;
-        }
-        .stat-card.ausente {
-            border-left-color: #dc2626;
-        }
-        .stat-number {
-            font-size: 32px;
-            font-weight: bold;
-            color: #0284c7;
-            margin: 10px 0;
-        }
-        .stat-card.presente .stat-number {
-            color: #16a34a;
-        }
-        .stat-card.tardanza .stat-number {
-            color: #ea580c;
-        }
-        .stat-card.ausente .stat-number {
-            color: #dc2626;
-        }
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-        }
-        .section {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        .section h2 {
-            color: #0284c7;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        .btn-primary, .btn-secondary {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 4px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: #0284c7;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #0369a1;
-        }
-        .btn-secondary {
-            background: #e5e7eb;
-            color: #333;
-        }
-        .btn-secondary:hover {
-            background: #d1d5db;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th {
-            background: #f3f4f6;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 2px solid #e5e7eb;
-            font-weight: 600;
-            color: #333;
-        }
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        tr:hover {
-            background: #f9fafb;
-        }
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .badge-presente {
-            background: #dcfce7;
-            color: #166534;
-        }
-        .badge-tardanza {
-            background: #fed7aa;
-            color: #92400e;
-        }
-        .badge-ausente {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        .menu-rapido {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        .menu-item {
-            background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            text-decoration: none;
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-        .menu-item:hover {
-            transform: translateY(-5px);
-        }
-        .menu-item.config {
-            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-        }
-        .menu-item.config:hover {
-            transform: translateY(-5px);
-        }
-        .success-message {
-            background: #dcfce7;
-            color: #166534;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            border-left: 4px solid #16a34a;
-        }
-        .hour {
-            font-weight: 600;
-            color: #0284c7;
+        @media (max-width: 640px) {
+            .grid, .menu-rapido { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>📋 Control de Asistencia</h1>
-        <div class="fecha-hoy">Hoy: <?php echo e($hoy->format('d/m/Y - l')); ?></div>
-        <div class="header-right">
-            <span id="userName">Usuario</span>
-            <button onclick="logout()">Cerrar Sesión</button>
+        <div class="container header-inner">
+            <div class="header-copy">
+                <h1>Control de asistencia</h1>
+                <p>Panel principal con acceso rapido a marcaciones, personal y configuracion.</p>
+                <div class="today-label">Hoy: <?php echo e($hoy->format('d/m/Y')); ?></div>
+            </div>
+            <div class="top-actions">
+                <span id="userName" class="today-label">Usuario</span>
+                <button onclick="logout()" class="btn btn-secondary">Cerrar sesion</button>
+            </div>
         </div>
     </header>
 
-    <div class="container">
+    <main class="container page">
         <div class="section">
-            <h2>📊 Resumen del Día</h2>
+            <h2>Resumen del dia</h2>
+            <p>Seguimiento inmediato del estado operativo de asistencia.</p>
             <div class="grid">
                 <div class="stat-card">
-                    <div class="stat-label">Total Personal</div>
+                    <div class="stat-label">Total personal</div>
                     <div class="stat-number"><?php echo e($totalPersonal); ?></div>
                 </div>
                 <div class="stat-card presente">
@@ -250,65 +93,95 @@
         </div>
 
         <div class="section">
-            <h2>⚡ Acciones Rápidas</h2>
+            <h2>Acciones rapidas</h2>
+            <p>Los modulos clave mantienen la misma linea visual minimalista.</p>
             <div class="menu-rapido">
                 <a href="<?php echo e(route('asistencia.crear')); ?>" class="menu-item">
-                    <div style="font-size: 24px; margin-bottom: 10px;">✍️</div>
+                    <span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+                        </svg>
+                    </span>
                     <strong>Marcar Asistencia</strong>
+                    <small>Registrar por CI con reloj digital y flujo automatico.</small>
                 </a>
                 <a href="<?php echo e(route('personal.index')); ?>" class="menu-item">
-                    <div style="font-size: 24px; margin-bottom: 10px;">👥</div>
+                    <span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M16 19a4 4 0 0 0-8 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M5 19a4 4 0 0 1 2-3.5M19 19a4 4 0 0 0-2-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                    </span>
                     <strong>Gestionar Personal</strong>
+                    <small>Consulta registros y usa acciones con iconos unificados.</small>
                 </a>
                 <a href="<?php echo e(route('asistencia.reporte')); ?>" class="menu-item">
-                    <div style="font-size: 24px; margin-bottom: 10px;">📈</div>
+                    <span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 19V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <path d="M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <path d="m8 15 3-3 2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
                     <strong>Reportes</strong>
+                    <small>Consulta consolidado diario de asistencia.</small>
                 </a>
-                <a href="<?php echo e(route('configuracion.index')); ?>" class="menu-item config">
-                    <div style="font-size: 24px; margin-bottom: 10px;">⚙️</div>
+                <a href="<?php echo e(route('configuracion.index')); ?>" class="menu-item">
+                    <span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" stroke="currentColor" stroke-width="1.8"/>
+                            <path d="M19.4 15a1 1 0 0 0 .2 1.1l.1.1a1 1 0 0 1 0 1.4l-1.2 1.2a1 1 0 0 1-1.4 0l-.1-.1a1 1 0 0 0-1.1-.2 1 1 0 0 0-.6.9V20a1 1 0 0 1-1 1h-1.7a1 1 0 0 1-1-1v-.2a1 1 0 0 0-.7-.9 1 1 0 0 0-1.1.2l-.1.1a1 1 0 0 1-1.4 0L4.3 17.9a1 1 0 0 1 0-1.4l.1-.1a1 1 0 0 0 .2-1.1 1 1 0 0 0-.9-.6H3.5a1 1 0 0 1-1-1v-1.7a1 1 0 0 1 1-1h.2a1 1 0 0 0 .9-.7 1 1 0 0 0-.2-1.1l-.1-.1a1 1 0 0 1 0-1.4l1.2-1.2a1 1 0 0 1 1.4 0l.1.1a1 1 0 0 0 1.1.2 1 1 0 0 0 .6-.9V4a1 1 0 0 1 1-1h1.7a1 1 0 0 1 1 1v.2a1 1 0 0 0 .7.9 1 1 0 0 0 1.1-.2l.1-.1a1 1 0 0 1 1.4 0l1.2 1.2a1 1 0 0 1 0 1.4l-.1.1a1 1 0 0 0-.2 1.1 1 1 0 0 0 .9.6h.2a1 1 0 0 1 1 1v1.7a1 1 0 0 1-1 1h-.2a1 1 0 0 0-.9.7Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
                     <strong>Configuración</strong>
+                    <small>Sucursales, turnos y calendarios en estilo minimalista.</small>
                 </a>
             </div>
         </div>
 
         <div class="section">
-            <h2>🕐 Últimas Marcaciones</h2>
+            <h2>Ultimas marcaciones</h2>
+            <p>Actividad reciente del dia para una revision rapida.</p>
             <?php if($asistenciasRecientes->count() > 0): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Personal</th>
-                            <th>CI</th>
-                            <th>Entrada</th>
-                            <th>Salida</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $__currentLoopData = $asistenciasRecientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asistencia): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
                             <tr>
-                                <td><strong><?php echo e($asistencia->personal->nombre_completo); ?></strong></td>
-                                <td><?php echo e($asistencia->personal->ci); ?></td>
-                                <td><span class="hour"><?php echo e($asistencia->hora_entrada->format('H:i')); ?></span></td>
-                                <td><?php echo e($asistencia->hora_salida ? $asistencia->hora_salida->format('H:i') : '—'); ?></td>
-                                <td>
-                                    <?php if($asistencia->estado === 'presente'): ?>
-                                        <span class="badge badge-presente">Presente</span>
-                                    <?php elseif($asistencia->estado === 'tardanza'): ?>
-                                        <span class="badge badge-tardanza">Tardanza</span>
-                                    <?php else: ?>
-                                        <span class="badge badge-ausente">Ausente</span>
-                                    <?php endif; ?>
-                                </td>
+                                <th>Personal</th>
+                                <th>CI</th>
+                                <th>Entrada</th>
+                                <th>Salida</th>
+                                <th>Estado</th>
                             </tr>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php $__currentLoopData = $asistenciasRecientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asistencia): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr>
+                                    <td><strong><?php echo e($asistencia->personal->nombre_completo); ?></strong></td>
+                                    <td><?php echo e($asistencia->personal->ci); ?></td>
+                                    <td><span class="hour"><?php echo e($asistencia->hora_entrada->format('H:i')); ?></span></td>
+                                    <td><?php echo e($asistencia->hora_salida ? $asistencia->hora_salida->format('H:i') : '—'); ?></td>
+                                    <td>
+                                        <?php if($asistencia->estado === 'presente'): ?>
+                                            <span class="badge badge-presente">Presente</span>
+                                        <?php elseif($asistencia->estado === 'tardanza'): ?>
+                                            <span class="badge badge-tardanza">Tardanza</span>
+                                        <?php else: ?>
+                                            <span class="badge badge-ausente">Ausente</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php else: ?>
-                <p style="color: #999; text-align: center; padding: 40px;">No hay marcaciones aún hoy.</p>
+                <div class="empty-state">No hay marcaciones aun hoy.</div>
             <?php endif; ?>
         </div>
-    </div>
+    </main>
 
     <script>
         async function loadUserInfo() {

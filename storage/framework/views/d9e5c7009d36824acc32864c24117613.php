@@ -8,43 +8,39 @@
     <title>Personal - Control de Asistencia</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 220px); color: #0f172a; }
-        header { background: linear-gradient(135deg, #0369a1 0%, #0284c7 55%, #38bdf8 100%); color: white; padding: 24px 0; box-shadow: 0 18px 45px rgba(3, 105, 161, 0.25); }
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }
+        header { background: #ffffff; color: #0f172a; padding: 24px 0; border-bottom: 1px solid #e2e8f0; }
+        .container { max-width: 1320px; margin: 0 auto; padding: 0 20px; }
         .header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
         .header-copy h1 { font-size: 32px; margin-bottom: 6px; }
-        .header-copy p { color: rgba(255, 255, 255, 0.9); }
-        .logout-btn { color: white; padding: 10px 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.22); cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
-        .logout-btn:hover { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
+        .header-copy p { color: #64748b; }
+        .logout-btn { color: #0f172a; padding: 10px 16px; border-radius: 14px; background: #e2e8f0; border: 1px solid transparent; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+        .logout-btn:hover { background: #cbd5e1; transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08); }
         main { padding: 28px 0 36px; }
-        .card { background: rgba(255, 255, 255, 0.94); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 22px; padding: 24px; margin-bottom: 22px; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08); backdrop-filter: blur(12px); }
-        .card h2 { color: #075985; margin-bottom: 10px; }
+        .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 22px; padding: 24px; margin-bottom: 22px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06); }
+        .card h2 { color: #0f172a; margin-bottom: 10px; }
         .card p { color: #475569; }
         .action-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
         .nav-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-        .nav-link { display: inline-flex; align-items: center; justify-content: center; padding: 12px 18px; border-radius: 14px; text-decoration: none; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
-        .nav-link:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(2, 132, 199, 0.14); }
-        .nav-link.primary { background: #0284c7; color: white; }
-        .nav-link.secondary { background: #e0f2fe; color: #075985; }
+        .nav-link, .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; border-radius: 14px; text-decoration: none; font-weight: 600; border: 1px solid transparent; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+        .nav-link:hover, .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12); }
+        .nav-link.primary, .btn-primary { background: #0f172a; color: white; }
+        .nav-link.secondary, .btn-neutral { background: #e2e8f0; color: #0f172a; }
         .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-top: 22px; }
-        .metric { background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%); border: 1px solid #dbeafe; border-radius: 18px; padding: 18px; }
+        .metric { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 18px; }
         .metric span { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 8px; }
         .metric strong { font-size: 28px; color: #0f172a; }
         .filters { display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 14px; align-items: end; }
         .field label { display: block; margin-bottom: 8px; color: #334155; font-weight: 600; }
-        .field input, .field select { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 14px; background: white; color: #0f172a; }
-        .field input:focus, .field select:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12); }
+        .field input, .field select, .field textarea { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 14px; font-size: 14px; background: white; color: #0f172a; }
+        .field textarea { min-height: 98px; resize: vertical; }
+        .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12); }
+        .field-hint { margin-top: 8px; color: #64748b; font-size: 13px; }
         .filter-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-        .btn { border: none; border-radius: 14px; padding: 12px 16px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12); }
-        .btn-info { background: #0ea5e9; color: white; }
-        .btn-edit { background: #e0f2fe; color: #075985; }
-        .btn-danger { background: #fee2e2; color: #b91c1c; }
-        .btn-neutral { background: #e2e8f0; color: #0f172a; }
         .table-wrap { overflow-x: auto; border-radius: 18px; border: 1px solid #e2e8f0; margin-top: 22px; }
-        table { width: 100%; border-collapse: collapse; min-width: 1080px; background: white; }
+        table { width: 100%; border-collapse: collapse; min-width: 1220px; background: white; }
         thead { background: #f8fafc; }
-        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
         th { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; }
         tbody tr:hover { background: #f8fbff; }
         .person-name strong { display: block; font-size: 15px; }
@@ -52,31 +48,71 @@
         .badge { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
         .badge.active { background: #dcfce7; color: #166534; }
         .badge.inactive { background: #fee2e2; color: #b91c1c; }
-        .action-cell { display: flex; gap: 8px; flex-wrap: wrap; }
+        .badge.turno { background: #dbeafe; color: #1d4ed8; }
+        .badge.turno-empty { background: #e2e8f0; color: #475569; }
+        .action-col { width: 1%; white-space: nowrap; }
+        .action-cell { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+        .icon-btn { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid #e2e8f0; background: white; color: #334155; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; cursor: pointer; }
+        .icon-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08); }
+        .icon-btn.assign:hover { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+        .icon-btn.delete:hover { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
         .empty-state { text-align: center; padding: 32px; color: #64748b; }
         .pagination { margin-top: 16px; }
         .pagination nav { display: flex; justify-content: center; }
         .pagination svg { width: 16px; height: 16px; }
-        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; border-radius: 16px; padding: 14px 16px; margin-bottom: 18px; }
+        .alert-success, .alert-error { border-radius: 16px; padding: 14px 16px; margin-bottom: 18px; }
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+        .alert-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+        .alert-error ul { margin-left: 18px; margin-top: 10px; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); display: none; align-items: center; justify-content: center; padding: 24px; z-index: 1000; }
         .modal-overlay.active { display: flex; }
-        .modal-card { width: min(720px, 100%); max-height: 85vh; overflow-y: auto; background: white; border-radius: 24px; padding: 24px; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.3); }
+        .modal-card { width: min(920px, 100%); max-height: 88vh; overflow-y: auto; background: white; border-radius: 24px; padding: 24px; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.3); }
+        .modal-card.compact { width: min(560px, 100%); }
         .modal-head { display: flex; align-items: start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
         .modal-head h3 { color: #0f172a; font-size: 24px; }
+        .modal-head p { color: #64748b; margin-top: 6px; }
         .modal-close { background: #e2e8f0; color: #0f172a; border: none; width: 38px; height: 38px; border-radius: 999px; cursor: pointer; font-size: 18px; }
         .modal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
         .modal-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; }
         .modal-item span { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 6px; }
         .modal-item strong { color: #0f172a; font-size: 15px; word-break: break-word; }
-        @media (max-width: 860px) {
+        .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+        .full { grid-column: 1 / -1; }
+        .section-divider { margin: 22px 0 14px; padding-top: 18px; border-top: 1px solid #e2e8f0; }
+        .section-divider h4 { margin-bottom: 6px; }
+        .section-divider p { font-size: 14px; color: #64748b; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+        @media (max-width: 900px) {
             .header-row { flex-direction: column; align-items: flex-start; }
-            .filters { grid-template-columns: 1fr; }
+            .filters, .form-grid { grid-template-columns: 1fr; }
             .filter-actions { width: 100%; }
             .filter-actions .btn { flex: 1; }
         }
     </style>
 </head>
 <body>
+    <?php
+        $personalsPage = $personals->getCollection();
+        $turnosAsignadosPagina = $personalsPage->filter(fn ($personal) => optional($personal->turnoVigente)->turno)->count();
+        $formMode = old('form_mode');
+        $assigningPersonalId = old('assigning_personal_id');
+        $personDefaultsJs = [
+            'nombre' => old('nombre'),
+            'apellido' => old('apellido'),
+            'ci' => old('ci'),
+            'email' => old('email'),
+            'telefono' => old('telefono'),
+            'direccion' => old('direccion', ''),
+            'fecha_nacimiento' => old('fecha_nacimiento'),
+            'fecha_contratacion' => old('fecha_contratacion', now()->format('Y-m-d')),
+            'tipo_personal_id' => old('tipo_personal_id'),
+            'rol_id' => old('rol_id'),
+            'sucursal_id' => old('sucursal_id'),
+            'turno_id' => old('turno_id'),
+            'fecha_inicio_turno' => old('fecha_inicio_turno', now()->format('Y-m-d')),
+        ];
+    ?>
+
     <header>
         <div class="container header-row">
             <div class="header-copy">
@@ -92,6 +128,17 @@
             <div class="alert-success"><?php echo e(session('success')); ?></div>
         <?php endif; ?>
 
+        <?php if(isset($errors) && $errors->any()): ?>
+            <div class="alert-error">
+                <strong>No pudimos guardar los cambios todavia.</strong>
+                <ul>
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
         <section class="card">
             <h2>Panel de navegacion</h2>
             <p>Los accesos principales se mantienen arriba para que la gestion sea rapida y clara.</p>
@@ -99,7 +146,7 @@
             <div class="action-bar">
                 <div class="nav-actions">
                     <a href="/dashboard" class="nav-link secondary">Volver al Dashboard</a>
-                    <a href="/personal/crear" class="nav-link primary">Agregar Personal</a>
+                    <button type="button" class="nav-link primary" id="openCreateModal">Agregar Personal</button>
                 </div>
             </div>
 
@@ -110,18 +157,22 @@
                 </div>
                 <div class="metric">
                     <span>Activos en esta pagina</span>
-                    <strong><?php echo e($personals->where('estado', 1)->count()); ?></strong>
+                    <strong><?php echo e($personalsPage->where('estado', 1)->count()); ?></strong>
                 </div>
                 <div class="metric">
                     <span>Con sucursal asignada</span>
-                    <strong><?php echo e($personals->filter(fn ($personal) => !empty($personal->sucursal))->count()); ?></strong>
+                    <strong><?php echo e($personalsPage->filter(fn ($personal) => !empty($personal->sucursal))->count()); ?></strong>
+                </div>
+                <div class="metric">
+                    <span>Personal con turno asignado</span>
+                    <strong><?php echo e($turnosAsignadosPagina); ?></strong>
                 </div>
             </div>
         </section>
 
         <section class="card">
             <h2>Personal registrado</h2>
-            <p>Debajo de los botones ahora tienes una vista completa del personal con datos relevantes y acciones directas.</p>
+            <p>La tabla ahora muestra el turno vigente y acciones directas sin desalinear la fila.</p>
 
             <form method="GET" action="<?php echo e(route('personal.index')); ?>" class="filters" style="margin-top: 20px;">
                 <div class="field">
@@ -143,7 +194,7 @@
                 </div>
 
                 <div class="filter-actions">
-                    <button type="submit" class="btn btn-info">Filtrar</button>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
                     <a href="<?php echo e(route('personal.index')); ?>" class="btn btn-neutral">Limpiar</a>
                 </div>
             </form>
@@ -158,13 +209,59 @@
                             <th>Sucursal</th>
                             <th>Tipo</th>
                             <th>Rol</th>
+                            <th>Turno</th>
                             <th>Ingreso</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
+                            <th class="action-col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $__empty_1 = true; $__currentLoopData = $personals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $personal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <?php
+                                $turnoVigente = optional($personal->turnoVigente)->turno;
+                                $turnoNombre = $turnoVigente->nombre ?? 'Sin turno';
+                                $fechaInicioTurno = optional(optional($personal->turnoVigente)->fecha_inicio)->format('Y-m-d')
+                                    ?? ($personal->fecha_contratacion ? 
+                                        \Illuminate\Support\Carbon::parse($personal->fecha_contratacion)->format('Y-m-d') : now()->format('Y-m-d'));
+                                $detailPayload = [
+                                    'nombreCompleto' => trim($personal->nombre . ' ' . $personal->apellido),
+                                    'id' => $personal->id,
+                                    'ci' => $personal->ci,
+                                    'email' => $personal->email ?: 'Sin email',
+                                    'telefono' => $personal->telefono ?: 'Sin telefono',
+                                    'direccion' => $personal->direccion ?: 'Sin direccion',
+                                    'fechaNacimiento' => $personal->fecha_nacimiento ? \Illuminate\Support\Carbon::parse($personal->fecha_nacimiento)->format('d/m/Y') : 'No registrado',
+                                    'fechaContratacion' => $personal->fecha_contratacion ? \Illuminate\Support\Carbon::parse($personal->fecha_contratacion)->format('d/m/Y') : 'No registrado',
+                                    'sucursal' => $personal->sucursal->nombre ?? 'Sin sucursal',
+                                    'tipoPersonal' => $personal->tipoPersonal->nombre ?? 'Sin tipo',
+                                    'rol' => $personal->rol ? ucfirst($personal->rol->nombre) : 'Sin rol',
+                                    'turno' => $turnoNombre,
+                                    'estado' => (int) $personal->estado === 1 ? 'Activo' : 'Inactivo',
+                                ];
+                                $editPayload = [
+                                    'id' => $personal->id,
+                                    'nombre' => $personal->nombre,
+                                    'apellido' => $personal->apellido,
+                                    'ci' => $personal->ci,
+                                    'email' => $personal->email,
+                                    'telefono' => $personal->telefono,
+                                    'direccion' => $personal->direccion,
+                                    'fecha_nacimiento' => $personal->fecha_nacimiento ? \Illuminate\Support\Carbon::parse($personal->fecha_nacimiento)->format('Y-m-d') : '',
+                                    'fecha_contratacion' => $personal->fecha_contratacion ? \Illuminate\Support\Carbon::parse($personal->fecha_contratacion)->format('Y-m-d') : '',
+                                    'tipo_personal_id' => $personal->tipo_personal_id,
+                                    'rol_id' => $personal->rol_id,
+                                    'sucursal_id' => $personal->sucursal_id,
+                                    'turno_id' => $turnoVigente->id ?? '',
+                                    'fecha_inicio_turno' => $fechaInicioTurno,
+                                ];
+                                $assignPayload = [
+                                    'id' => $personal->id,
+                                    'nombreCompleto' => trim($personal->nombre . ' ' . $personal->apellido),
+                                    'sucursal_id' => $personal->sucursal_id,
+                                    'turno_id' => $turnoVigente->id ?? '',
+                                    'fecha_inicio_turno' => $fechaInicioTurno,
+                                ];
+                            ?>
                             <tr>
                                 <td>
                                     <div class="person-name">
@@ -180,6 +277,9 @@
                                 <td><?php echo e($personal->sucursal->nombre ?? 'Sin sucursal'); ?></td>
                                 <td><?php echo e($personal->tipoPersonal->nombre ?? 'Sin tipo'); ?></td>
                                 <td><?php echo e($personal->rol ? ucfirst($personal->rol->nombre) : 'Sin rol'); ?></td>
+                                <td>
+                                    <span class="badge <?php echo e($turnoVigente ? 'turno' : 'turno-empty'); ?>"><?php echo e($turnoNombre); ?></span>
+                                </td>
                                 <td><?php echo e($personal->fecha_contratacion ? \Illuminate\Support\Carbon::parse($personal->fecha_contratacion)->format('d/m/Y') : 'No registrado'); ?></td>
                                 <td>
                                     <span class="badge <?php echo e((int) $personal->estado === 1 ? 'active' : 'inactive'); ?>">
@@ -187,39 +287,61 @@
 
                                     </span>
                                 </td>
-                                <td>
+                                <td class="action-col">
                                     <div class="action-cell">
                                         <button
                                             type="button"
-                                            class="btn btn-info"
+                                            class="icon-btn"
+                                            title="Ver detalle"
                                             data-modal-open
-                                            data-personal="<?php echo e(e(json_encode([
-                                                'nombreCompleto' => trim($personal->nombre . ' ' . $personal->apellido),
-                                                'id' => $personal->id,
-                                                'ci' => $personal->ci,
-                                                'email' => $personal->email ?: 'Sin email',
-                                                'telefono' => $personal->telefono ?: 'Sin telefono',
-                                                'direccion' => $personal->direccion ?: 'Sin direccion',
-                                                'fechaNacimiento' => $personal->fecha_nacimiento ? \Illuminate\Support\Carbon::parse($personal->fecha_nacimiento)->format('d/m/Y') : 'No registrado',
-                                                'fechaContratacion' => $personal->fecha_contratacion ? \Illuminate\Support\Carbon::parse($personal->fecha_contratacion)->format('d/m/Y') : 'No registrado',
-                                                'sucursal' => $personal->sucursal->nombre ?? 'Sin sucursal',
-                                                'tipoPersonal' => $personal->tipoPersonal->nombre ?? 'Sin tipo',
-                                                'rol' => $personal->rol ? ucfirst($personal->rol->nombre) : 'Sin rol',
-                                                'estado' => (int) $personal->estado === 1 ? 'Activo' : 'Inactivo',
-                                            ]))); ?>"
+                                            data-personal='<?php echo json_encode($detailPayload, 15, 512) ?>'
                                         >
-                                            Ver
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+                                            </svg>
                                         </button>
-                                        <a href="<?php echo e(route('personal.editar', $personal->id)); ?>" class="btn btn-edit">Editar</a>
+                                        <button
+                                            type="button"
+                                            class="icon-btn"
+                                            title="Editar"
+                                            data-edit-open
+                                            data-personal-form='<?php echo json_encode($editPayload, 15, 512) ?>'
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M4 20h4l10.5-10.5-4-4L4 16v4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                <path d="m12.5 7.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="icon-btn assign"
+                                            title="Asignar turno"
+                                            data-assign-open
+                                            data-assign='<?php echo json_encode($assignPayload, 15, 512) ?>'
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M7 4v4M17 4v4M4 10h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                <rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                                                <path d="m9 15 2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
                                         <?php if((int) $personal->estado === 1): ?>
-                                            <a href="<?php echo e(route('personal.eliminar', $personal->id)); ?>" class="btn btn-danger" onclick="return confirm('Se dara de baja a este registro. Deseas continuar?')">Baja</a>
+                                            <a href="<?php echo e(route('personal.eliminar', $personal->id)); ?>" class="icon-btn delete" title="Dar de baja" onclick="return confirm('Se dara de baja a este registro. Deseas continuar?')">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                    <path d="M4 7h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                    <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                    <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                    <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                </svg>
+                                            </a>
                                         <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
-                                <td colspan="9" class="empty-state">No hay personal registrado con los filtros actuales.</td>
+                                <td colspan="10" class="empty-state">No hay personal registrado con los filtros actuales.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -238,9 +360,9 @@
             <div class="modal-head">
                 <div>
                     <h3 id="modalTitle">Detalle del personal</h3>
-                    <p style="color: #64748b;">Vista rapida del registro seleccionado.</p>
+                    <p>Vista rapida del registro seleccionado.</p>
                 </div>
-                <button type="button" class="modal-close" id="modalClose" aria-label="Cerrar">×</button>
+                <button type="button" class="modal-close" data-modal-close="personalModal" aria-label="Cerrar">×</button>
             </div>
 
             <div class="modal-grid">
@@ -255,8 +377,158 @@
                 <div class="modal-item"><span>Sucursal</span><strong data-field="sucursal">-</strong></div>
                 <div class="modal-item"><span>Tipo de personal</span><strong data-field="tipoPersonal">-</strong></div>
                 <div class="modal-item"><span>Rol</span><strong data-field="rol">-</strong></div>
+                <div class="modal-item"><span>Turno vigente</span><strong data-field="turno">-</strong></div>
                 <div class="modal-item"><span>Estado</span><strong data-field="estado">-</strong></div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="personFormModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="personFormTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="personFormTitle">Registrar personal</h3>
+                    <p>Mantenemos un flujo minimalista, pero ahora incluyendo el turno desde el alta o la actualizacion.</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close="personFormModal" aria-label="Cerrar">×</button>
+            </div>
+
+            <form id="personForm" method="POST" action="<?php echo e(route('personal.guardar')); ?>">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="form_mode" id="form_mode" value="create">
+                <input type="hidden" name="editing_personal_id" id="editing_personal_id" value="<?php echo e(old('editing_personal_id')); ?>">
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" type="text" name="nombre" value="<?php echo e(old('nombre')); ?>" required>
+                    </div>
+                    <div class="field">
+                        <label for="apellido">Apellido</label>
+                        <input id="apellido" type="text" name="apellido" value="<?php echo e(old('apellido')); ?>" required>
+                    </div>
+                    <div class="field">
+                        <label for="ci">CI</label>
+                        <input id="ci" type="text" name="ci" value="<?php echo e(old('ci')); ?>" required>
+                    </div>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" value="<?php echo e(old('email')); ?>" required>
+                    </div>
+                    <div class="field">
+                        <label for="telefono">Telefono</label>
+                        <input id="telefono" type="text" name="telefono" value="<?php echo e(old('telefono')); ?>">
+                    </div>
+                    <div class="field">
+                        <label for="fecha_nacimiento">Fecha de nacimiento</label>
+                        <input id="fecha_nacimiento" type="date" name="fecha_nacimiento" value="<?php echo e(old('fecha_nacimiento')); ?>">
+                    </div>
+                    <div class="field full">
+                        <label for="direccion">Direccion</label>
+                        <textarea id="direccion" name="direccion"><?php echo e(old('direccion')); ?></textarea>
+                    </div>
+                    <div class="field">
+                        <label for="fecha_contratacion">Fecha de contratacion</label>
+                        <input id="fecha_contratacion" type="date" name="fecha_contratacion" value="<?php echo e(old('fecha_contratacion', now()->format('Y-m-d'))); ?>" required>
+                    </div>
+                    <div class="field">
+                        <label for="tipo_personal_id">Tipo de personal</label>
+                        <select id="tipo_personal_id" name="tipo_personal_id" required>
+                            <option value="">Seleccionar...</option>
+                            <?php $__currentLoopData = $tiposPersonal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tipoPersonal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($tipoPersonal->id); ?>"><?php echo e($tipoPersonal->nombre); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="rol_id">Rol</label>
+                        <select id="rol_id" name="rol_id" required>
+                            <option value="">Seleccionar rol...</option>
+                            <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rol): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($rol->id); ?>"><?php echo e(ucfirst($rol->nombre)); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="sucursal_personal">Sucursal</label>
+                        <select id="sucursal_personal" name="sucursal_id" required>
+                            <option value="">Seleccionar sucursal...</option>
+                            <?php $__currentLoopData = $sucursales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sucursal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($sucursal->id); ?>"><?php echo e($sucursal->nombre); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-divider">
+                    <h4>Asignacion de turno</h4>
+                    <p>Esto evita el caso operativo donde el personal queda registrado pero no puede marcar asistencia por no tener turno vigente.</p>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="turno_personal">Turno</label>
+                        <select id="turno_personal" name="turno_id">
+                            <option value="">Sin turno por ahora</option>
+                            <?php $__currentLoopData = $turnos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $turno): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($turno->id); ?>" data-sucursal="<?php echo e($turno->sucursal_id); ?>"><?php echo e($turno->nombre); ?> - <?php echo e($turno->sucursal->nombre ?? 'Sin sucursal'); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </select>
+                        <div class="field-hint">Solo se muestran turnos de la sucursal seleccionada.</div>
+                    </div>
+                    <div class="field">
+                        <label for="fecha_inicio_turno">Fecha de inicio del turno</label>
+                        <input id="fecha_inicio_turno" type="date" name="fecha_inicio_turno" value="<?php echo e(old('fecha_inicio_turno', now()->format('Y-m-d'))); ?>">
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-neutral" data-modal-close="personFormModal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="personSubmit">Guardar personal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="assignTurnoModal" aria-hidden="true">
+        <div class="modal-card compact" role="dialog" aria-modal="true" aria-labelledby="assignTurnoTitle">
+            <div class="modal-head">
+                <div>
+                    <h3 id="assignTurnoTitle">Asignar turno</h3>
+                    <p>Actualiza el turno vigente directamente desde el listado.</p>
+                </div>
+                <button type="button" class="modal-close" data-modal-close="assignTurnoModal" aria-label="Cerrar">×</button>
+            </div>
+
+            <form id="assignTurnoForm" method="POST" action="">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="assigning_personal_id" id="assigning_personal_id" value="<?php echo e(old('assigning_personal_id')); ?>">
+
+                <div class="field" style="margin-bottom: 16px;">
+                    <label for="assign_personal_nombre">Personal</label>
+                    <input id="assign_personal_nombre" type="text" readonly>
+                </div>
+
+                <div class="field" style="margin-bottom: 16px;">
+                    <label for="assign_turno_id">Turno</label>
+                    <select id="assign_turno_id" name="turno_id" required>
+                        <option value="">Seleccionar turno...</option>
+                        <?php $__currentLoopData = $turnos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $turno): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($turno->id); ?>" data-sucursal="<?php echo e($turno->sucursal_id); ?>"><?php echo e($turno->nombre); ?> - <?php echo e($turno->sucursal->nombre ?? 'Sin sucursal'); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="assign_fecha_inicio_turno">Fecha de inicio</label>
+                    <input id="assign_fecha_inicio_turno" type="date" name="fecha_inicio_turno" value="<?php echo e(old('fecha_inicio_turno', now()->format('Y-m-d'))); ?>">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-neutral" data-modal-close="assignTurnoModal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar turno</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -275,45 +547,165 @@
             window.location.href = '/login';
         }
 
-        const modal = document.getElementById('personalModal');
-        const modalClose = document.getElementById('modalClose');
-        const modalFields = modal.querySelectorAll('[data-field]');
+        const detailModal = document.getElementById('personalModal');
+        const detailFields = detailModal.querySelectorAll('[data-field]');
+        const personFormModal = document.getElementById('personFormModal');
+        const personForm = document.getElementById('personForm');
+        const personSubmit = document.getElementById('personSubmit');
+        const personFormTitle = document.getElementById('personFormTitle');
+        const formModeInput = document.getElementById('form_mode');
+        const editingPersonalId = document.getElementById('editing_personal_id');
+        const formSucursal = document.getElementById('sucursal_personal');
+        const formTurno = document.getElementById('turno_personal');
+        const assignTurnoModal = document.getElementById('assignTurnoModal');
+        const assignTurnoForm = document.getElementById('assignTurnoForm');
+        const assignPersonalNombre = document.getElementById('assign_personal_nombre');
+        const assignPersonalId = document.getElementById('assigning_personal_id');
+        const assignTurno = document.getElementById('assign_turno_id');
+        const assignFechaInicio = document.getElementById('assign_fecha_inicio_turno');
+        const personDefaults = <?php echo e(\Illuminate\Support\Js::from($personDefaultsJs)); ?>;
 
-        function closeModal() {
-            modal.classList.remove('active');
-            modal.setAttribute('aria-hidden', 'true');
+        function openModal(node) {
+            node.classList.add('active');
+            node.setAttribute('aria-hidden', 'false');
         }
 
-        function openModal(data) {
-            modalFields.forEach((field) => {
-                const key = field.dataset.field;
-                field.textContent = data[key] ?? '-';
+        function closeModal(node) {
+            node.classList.remove('active');
+            node.setAttribute('aria-hidden', 'true');
+        }
+
+        function syncTurnoOptions(select, sucursalId, selectedValue) {
+            const currentSucursal = String(sucursalId || '');
+            Array.from(select.options).forEach((option, index) => {
+                if (index === 0) {
+                    option.hidden = false;
+                    return;
+                }
+
+                const optionSucursal = option.dataset.sucursal || '';
+                const visible = !currentSucursal || optionSucursal === currentSucursal;
+                option.hidden = !visible;
             });
 
-            modal.classList.add('active');
-            modal.setAttribute('aria-hidden', 'false');
+            if (selectedValue) {
+                const valid = Array.from(select.options).some((option) => option.value === String(selectedValue) && !option.hidden);
+                select.value = valid ? String(selectedValue) : '';
+            } else {
+                select.value = '';
+            }
         }
+
+        function setFormValue(name, value) {
+            const element = personForm.querySelector(`[name="${name}"]`);
+            if (!element) return;
+            element.value = value ?? '';
+        }
+
+        function openPersonForm(mode, data = {}) {
+            const payload = { ...personDefaults, ...data };
+            formModeInput.value = mode;
+            editingPersonalId.value = payload.id || '';
+            setFormValue('nombre', payload.nombre);
+            setFormValue('apellido', payload.apellido);
+            setFormValue('ci', payload.ci);
+            setFormValue('email', payload.email);
+            setFormValue('telefono', payload.telefono);
+            setFormValue('direccion', payload.direccion);
+            setFormValue('fecha_nacimiento', payload.fecha_nacimiento);
+            setFormValue('fecha_contratacion', payload.fecha_contratacion || '<?php echo e(now()->format('Y-m-d')); ?>');
+            setFormValue('tipo_personal_id', payload.tipo_personal_id);
+            setFormValue('rol_id', payload.rol_id);
+            setFormValue('sucursal_id', payload.sucursal_id);
+            setFormValue('fecha_inicio_turno', payload.fecha_inicio_turno || payload.fecha_contratacion || '<?php echo e(now()->format('Y-m-d')); ?>');
+
+            if (mode === 'edit') {
+                personForm.action = `/personal/${payload.id}`;
+                personFormTitle.textContent = 'Actualizar personal';
+                personSubmit.textContent = 'Guardar cambios';
+            } else {
+                personForm.action = '<?php echo e(route('personal.guardar')); ?>';
+                personFormTitle.textContent = 'Registrar personal';
+                personSubmit.textContent = 'Guardar personal';
+            }
+
+            syncTurnoOptions(formTurno, payload.sucursal_id, payload.turno_id);
+            openModal(personFormModal);
+        }
+
+        function openAssignForm(data) {
+            assignTurnoForm.action = `/personal/${data.id}/asignar-turno`;
+            assignPersonalNombre.value = data.nombreCompleto || '';
+            assignPersonalId.value = data.id || '';
+            assignFechaInicio.value = data.fecha_inicio_turno || '<?php echo e(now()->format('Y-m-d')); ?>';
+            syncTurnoOptions(assignTurno, data.sucursal_id, data.turno_id);
+            openModal(assignTurnoModal);
+        }
+
+        document.getElementById('openCreateModal').addEventListener('click', () => openPersonForm('create'));
 
         document.querySelectorAll('[data-modal-open]').forEach((button) => {
             button.addEventListener('click', () => {
-                const payload = JSON.parse(button.getAttribute('data-personal'));
-                openModal(payload);
+                const payload = JSON.parse(button.dataset.personal);
+                detailFields.forEach((field) => {
+                    field.textContent = payload[field.dataset.field] ?? '-';
+                });
+                openModal(detailModal);
             });
         });
 
-        modalClose.addEventListener('click', closeModal);
+        document.querySelectorAll('[data-edit-open]').forEach((button) => {
+            button.addEventListener('click', () => openPersonForm('edit', JSON.parse(button.dataset.personalForm)));
+        });
 
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                closeModal();
-            }
+        document.querySelectorAll('[data-assign-open]').forEach((button) => {
+            button.addEventListener('click', () => openAssignForm(JSON.parse(button.dataset.assign)));
+        });
+
+        formSucursal.addEventListener('change', () => {
+            syncTurnoOptions(formTurno, formSucursal.value, formTurno.value);
+        });
+
+        document.querySelectorAll('[data-modal-close]').forEach((button) => {
+            button.addEventListener('click', () => closeModal(document.getElementById(button.dataset.modalClose)));
+        });
+
+        [detailModal, personFormModal, assignTurnoModal].forEach((overlay) => {
+            overlay.addEventListener('click', (event) => {
+                if (event.target === overlay) {
+                    closeModal(overlay);
+                }
+            });
         });
 
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && modal.classList.contains('active')) {
-                closeModal();
-            }
+            if (event.key !== 'Escape') return;
+            [assignTurnoModal, personFormModal, detailModal].forEach((overlay) => {
+                if (overlay.classList.contains('active')) {
+                    closeModal(overlay);
+                }
+            });
         });
+
+        <?php if($formMode === 'create'): ?>
+            openPersonForm('create');
+        <?php elseif($formMode === 'edit'): ?>
+            openPersonForm('edit', {
+                id: '<?php echo e(old('editing_personal_id')); ?>',
+                ...personDefaults
+            });
+        <?php elseif($assigningPersonalId): ?>
+            <?php
+                $assignedPerson = $personalsPage->firstWhere('id', (int) $assigningPersonalId);
+            ?>
+            openAssignForm({
+                id: '<?php echo e($assigningPersonalId); ?>',
+                nombreCompleto: <?php echo json_encode($assignedPerson ? trim($assignedPerson->nombre . ' ' . $assignedPerson->apellido) : '', 15, 512) ?>,
+                sucursal_id: '<?php echo e(old('sucursal_id', $assignedPerson->sucursal_id ?? '')); ?>',
+                turno_id: '<?php echo e(old('turno_id')); ?>',
+                fecha_inicio_turno: '<?php echo e(old('fecha_inicio_turno', now()->format('Y-m-d'))); ?>'
+            });
+        <?php endif; ?>
     </script>
 </body>
 </html>

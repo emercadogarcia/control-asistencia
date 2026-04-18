@@ -12,7 +12,7 @@ class Asistencia extends Model
     protected $table = 'asistencia';
     protected $fillable = [
         'personal_id', 'fecha', 'hora_entrada', 'hora_salida',
-        'estado', 'observaciones', 'foto_url', 'ip_dispositivo', 'registrado_por'
+        'estado', 'observaciones', 'foto_url', 'ip_dispositivo'
     ];
     protected $casts = [
         'fecha' => 'date',
@@ -29,11 +29,6 @@ class Asistencia extends Model
     public function personal()
     {
         return $this->belongsTo(Personal::class, 'personal_id');
-    }
-
-    public function registrador()
-    {
-        return $this->belongsTo(Personal::class, 'registrado_por');
     }
 
     public function horasExtras()

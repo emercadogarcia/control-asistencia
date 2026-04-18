@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Crear Personal</title>
+    <title>Editar Personal</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }
@@ -36,17 +36,22 @@
     </style>
 </head>
 <body>
+    <?php
+        $turnoVigente = optional($personal->turnoVigente)->turno;
+        $fechaInicioTurno = old('fecha_inicio_turno', optional(optional($personal->turnoVigente)->fecha_inicio)->format('Y-m-d') ?? ($personal->fecha_contratacion ?? now()->format('Y-m-d')));
+    ?>
+
     <header>
         <div class="container header-inner">
-            <h1>Crear personal</h1>
-            <p>Registro con el mismo formato limpio del proyecto, ahora incluyendo asignacion de turno.</p>
+            <h1>Editar personal</h1>
+            <p>Ajusta los datos del registro sin salir del flujo principal.</p>
         </div>
     </header>
 
     <main class="container page">
         <div class="form-card">
-            <h2>Registrar nuevo personal</h2>
-            <p class="intro">Completa la informacion principal y, si corresponde, deja su turno listo para asistencia.</p>
+            <h2>Actualizar informacion</h2>
+            <p class="intro">Mantiene el mismo formato limpio del modulo y ahora permite actualizar el turno vigente.</p>
 
             <?php if(isset($errors) && $errors->any()): ?>
                 <div class="alert-error">
@@ -59,47 +64,47 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="<?php echo e(route('personal.guardar')); ?>">
+            <form method="POST" action="<?php echo e(route('personal.actualizar', $personal->id)); ?>">
                 <?php echo csrf_field(); ?>
                 <div class="form-grid">
                     <div>
                         <label>Nombre</label>
-                        <input type="text" name="nombre" value="<?php echo e(old('nombre')); ?>" required>
+                        <input type="text" name="nombre" value="<?php echo e(old('nombre', $personal->nombre)); ?>" required>
                     </div>
                     <div>
                         <label>Apellido</label>
-                        <input type="text" name="apellido" value="<?php echo e(old('apellido')); ?>" required>
+                        <input type="text" name="apellido" value="<?php echo e(old('apellido', $personal->apellido)); ?>" required>
                     </div>
                     <div>
                         <label>CI</label>
-                        <input type="text" name="ci" value="<?php echo e(old('ci')); ?>" required>
+                        <input type="text" name="ci" value="<?php echo e(old('ci', $personal->ci)); ?>" required>
                     </div>
                     <div>
                         <label>Email</label>
-                        <input type="email" name="email" value="<?php echo e(old('email')); ?>" required>
+                        <input type="email" name="email" value="<?php echo e(old('email', $personal->email)); ?>" required>
                     </div>
                     <div>
                         <label>Telefono</label>
-                        <input type="text" name="telefono" value="<?php echo e(old('telefono')); ?>">
+                        <input type="text" name="telefono" value="<?php echo e(old('telefono', $personal->telefono)); ?>">
                     </div>
                     <div>
                         <label>Fecha de nacimiento</label>
-                        <input type="date" name="fecha_nacimiento" value="<?php echo e(old('fecha_nacimiento')); ?>">
+                        <input type="date" name="fecha_nacimiento" value="<?php echo e(old('fecha_nacimiento', $personal->fecha_nacimiento)); ?>">
                     </div>
                     <div class="full">
                         <label>Direccion</label>
-                        <textarea name="direccion"><?php echo e(old('direccion')); ?></textarea>
+                        <textarea name="direccion"><?php echo e(old('direccion', $personal->direccion)); ?></textarea>
                     </div>
                     <div>
                         <label>Fecha de contratacion</label>
-                        <input type="date" name="fecha_contratacion" value="<?php echo e(old('fecha_contratacion', date('Y-m-d'))); ?>" required>
+                        <input type="date" name="fecha_contratacion" value="<?php echo e(old('fecha_contratacion', $personal->fecha_contratacion)); ?>" required>
                     </div>
                     <div>
                         <label>Tipo de personal</label>
                         <select name="tipo_personal_id" required>
                             <option value="">Seleccionar...</option>
                             <?php $__currentLoopData = $tiposPersonal; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tipoPersonal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($tipoPersonal->id); ?>" <?php echo e(old('tipo_personal_id') == $tipoPersonal->id ? 'selected' : ''); ?>><?php echo e($tipoPersonal->nombre); ?></option>
+                                <option value="<?php echo e($tipoPersonal->id); ?>" <?php echo e(old('tipo_personal_id', $personal->tipo_personal_id) == $tipoPersonal->id ? 'selected' : ''); ?>><?php echo e($tipoPersonal->nombre); ?></option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
@@ -108,7 +113,7 @@
                         <select name="rol_id" required>
                             <option value="">Seleccionar rol...</option>
                             <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rol): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($rol->id); ?>" <?php echo e(old('rol_id') == $rol->id ? 'selected' : ''); ?>><?php echo e(ucfirst($rol->nombre)); ?></option>
+                                <option value="<?php echo e($rol->id); ?>" <?php echo e(old('rol_id', $personal->rol_id) == $rol->id ? 'selected' : ''); ?>><?php echo e(ucfirst($rol->nombre)); ?></option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
@@ -117,36 +122,36 @@
                         <select name="sucursal_id" id="sucursal_id" required>
                             <option value="">Seleccionar sucursal...</option>
                             <?php $__currentLoopData = $sucursales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sucursal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($sucursal->id); ?>" <?php echo e(old('sucursal_id') == $sucursal->id ? 'selected' : ''); ?>><?php echo e($sucursal->nombre); ?></option>
+                                <option value="<?php echo e($sucursal->id); ?>" <?php echo e(old('sucursal_id', $personal->sucursal_id) == $sucursal->id ? 'selected' : ''); ?>><?php echo e($sucursal->nombre); ?></option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
 
                 <div class="section-divider">
-                    <h3>Asignacion de turno</h3>
-                    <p>Si el personal va a marcar asistencia, conviene salir de aqui con turno vigente configurado.</p>
+                    <h3>Turno asignado</h3>
+                    <p>Actualizarlo aqui mantiene consistente el registro y evita fallos al marcar asistencia.</p>
                 </div>
 
                 <div class="form-grid">
                     <div>
                         <label>Turno</label>
                         <select name="turno_id" id="turno_id">
-                            <option value="">Sin turno por ahora</option>
+                            <option value="">Mantener turno actual</option>
                             <?php $__currentLoopData = $turnos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $turno): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($turno->id); ?>" data-sucursal="<?php echo e($turno->sucursal_id); ?>" <?php echo e(old('turno_id') == $turno->id ? 'selected' : ''); ?>><?php echo e($turno->nombre); ?> - <?php echo e($turno->sucursal->nombre ?? 'Sin sucursal'); ?></option>
+                                <option value="<?php echo e($turno->id); ?>" data-sucursal="<?php echo e($turno->sucursal_id); ?>" <?php echo e(old('turno_id', $turnoVigente->id ?? '') == $turno->id ? 'selected' : ''); ?>><?php echo e($turno->nombre); ?> - <?php echo e($turno->sucursal->nombre ?? 'Sin sucursal'); ?></option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
-                        <div class="field-hint">Solo se consideran turnos de la sucursal elegida.</div>
+                        <div class="field-hint">Se filtra por la sucursal seleccionada.</div>
                     </div>
                     <div>
                         <label>Fecha de inicio del turno</label>
-                        <input type="date" name="fecha_inicio_turno" value="<?php echo e(old('fecha_inicio_turno', old('fecha_contratacion', date('Y-m-d')))); ?>">
+                        <input type="date" name="fecha_inicio_turno" value="<?php echo e($fechaInicioTurno); ?>">
                     </div>
                 </div>
 
                 <div class="actions">
-                    <button type="submit" class="btn btn-submit">Crear personal</button>
+                    <button type="submit" class="btn btn-submit">Guardar cambios</button>
                     <a href="<?php echo e(route('personal.index')); ?>" class="btn link-back">Cancelar</a>
                 </div>
             </form>
@@ -180,4 +185,4 @@
     </script>
 </body>
 </html>
-<?php /**PATH /workspace/resources/views/personal/crear.blade.php ENDPATH**/ ?>
+<?php /**PATH /workspace/resources/views/personal/editar.blade.php ENDPATH**/ ?>
