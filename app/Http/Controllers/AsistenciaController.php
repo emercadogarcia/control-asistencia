@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asistencia;
 use App\Models\Personal;
+use App\Models\Sucursal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -166,6 +167,13 @@ class AsistenciaController extends Controller
         $asistencias = $query->orderBy('fecha', 'desc')->get();
 
         return response()->json($asistencias);
+    }
+
+    public function reportes()
+    {
+        $sucursales = Sucursal::where('estado', 1)->orderBy('nombre')->get();
+
+        return view('asistencia.reporte', compact('sucursales'));
     }
 
     public function exportarExcel()

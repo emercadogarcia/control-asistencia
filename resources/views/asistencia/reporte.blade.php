@@ -79,7 +79,7 @@
             const fin = document.getElementById('fechaFin').value;
             const sucursal = document.getElementById('sucursalFilter').value;
 
-            const url = new URL('{{ route('asistencia.reporte') }}');
+            const url = new URL('{{ route('asistencia.reporte.datos') }}');
             url.searchParams.append('inicio', inicio);
             url.searchParams.append('fin', fin);
             if (sucursal) url.searchParams.append('sucursal_id', sucursal);

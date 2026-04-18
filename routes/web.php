@@ -24,7 +24,8 @@ Route::prefix('asistencia')->group(function () {
     Route::get('/crear', [AsistenciaController::class, 'crear'])->name('asistencia.crear');
     Route::get('/buscar-personal', [AsistenciaController::class, 'buscarPersonal'])->name('asistencia.buscar');
     Route::post('/marcar', [AsistenciaController::class, 'marcar'])->name('asistencia.marcar');
-    Route::get('/reporte', [AsistenciaController::class, 'reporteDiario'])->name('asistencia.reporte');
+    Route::get('/reporte', [AsistenciaController::class, 'reportes'])->name('asistencia.reporte');
+    Route::get('/reporte/datos', [AsistenciaController::class, 'reporteDiario'])->name('asistencia.reporte.datos');
     Route::get('/exportar', [AsistenciaController::class, 'exportarExcel'])->name('asistencia.exportar');
 });
 
