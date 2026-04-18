@@ -22,8 +22,15 @@ class ConfiguracionController extends Controller
     // SUCURSALES
     public function sucursales()
     {
-        $sucursales = Sucursal::where('estado', 1)->paginate(10);
-        return view('configuracion.sucursales', compact('sucursales'));
+        $sucursales = Sucursal::where('estado', 1)
+            ->withCount(['personals', 'turnos'])
+            ->orderBy('nombre')
+            ->paginate(10);
+        $sucursalEdit = request()->filled('edit')
+            ? Sucursal::where('estado', 1)->findOrFail(request()->integer('edit'))
+            : null;
+
+        return view('configuracion.sucursales', compact('sucursales', 'sucursalEdit'));
     }
 
     public function guardarSucursal(Request $request, $id = null)
@@ -48,8 +55,7 @@ class ConfiguracionController extends Controller
 
     public function editarSucursal($id)
     {
-        $sucursal = Sucursal::findOrFail($id);
-        return view('configuracion.sucursal-editar', compact('sucursal'));
+        return redirect()->route('configuracion.sucursales', ['edit' => $id]);
     }
 
     public function eliminarSucursal($id)

@@ -8,26 +8,26 @@
     <title>Personal - Control de Asistencia</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 220px); color: #0f172a; }
-        header { background: linear-gradient(135deg, #0369a1 0%, #0284c7 55%, #38bdf8 100%); color: white; padding: 24px 0; box-shadow: 0 18px 45px rgba(3, 105, 161, 0.25); }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }
+        header { background: #ffffff; color: #0f172a; padding: 24px 0; border-bottom: 1px solid #e2e8f0; box-shadow: none; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
         .header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
         .header-copy h1 { font-size: 32px; margin-bottom: 6px; }
-        .header-copy p { color: rgba(255, 255, 255, 0.9); }
-        .logout-btn { color: white; padding: 10px 16px; border-radius: 999px; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.22); cursor: pointer; transition: background 0.2s ease, transform 0.2s ease; }
-        .logout-btn:hover { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
+        .header-copy p { color: #64748b; }
+        .logout-btn { color: #0f172a; padding: 10px 16px; border-radius: 14px; background: #e2e8f0; border: 1px solid transparent; cursor: pointer; transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+        .logout-btn:hover { background: #cbd5e1; transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08); }
         main { padding: 28px 0 36px; }
-        .card { background: rgba(255, 255, 255, 0.94); border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 22px; padding: 24px; margin-bottom: 22px; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08); backdrop-filter: blur(12px); }
-        .card h2 { color: #075985; margin-bottom: 10px; }
+        .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 22px; padding: 24px; margin-bottom: 22px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06); }
+        .card h2 { color: #0f172a; margin-bottom: 10px; }
         .card p { color: #475569; }
         .action-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
         .nav-actions { display: flex; gap: 12px; flex-wrap: wrap; }
         .nav-link { display: inline-flex; align-items: center; justify-content: center; padding: 12px 18px; border-radius: 14px; text-decoration: none; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
         .nav-link:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(2, 132, 199, 0.14); }
-        .nav-link.primary { background: #0284c7; color: white; }
-        .nav-link.secondary { background: #e0f2fe; color: #075985; }
+        .nav-link.primary { background: #0f172a; color: white; }
+        .nav-link.secondary { background: #e2e8f0; color: #0f172a; }
         .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-top: 22px; }
-        .metric { background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%); border: 1px solid #dbeafe; border-radius: 18px; padding: 18px; }
+        .metric { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 18px; }
         .metric span { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b; margin-bottom: 8px; }
         .metric strong { font-size: 28px; color: #0f172a; }
         .filters { display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 14px; align-items: end; }
@@ -37,9 +37,6 @@
         .filter-actions { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn { border: none; border-radius: 14px; padding: 12px 16px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12); }
-        .btn-info { background: #0ea5e9; color: white; }
-        .btn-edit { background: #e0f2fe; color: #075985; }
-        .btn-danger { background: #fee2e2; color: #b91c1c; }
         .btn-neutral { background: #e2e8f0; color: #0f172a; }
         .table-wrap { overflow-x: auto; border-radius: 18px; border: 1px solid #e2e8f0; margin-top: 22px; }
         table { width: 100%; border-collapse: collapse; min-width: 1080px; background: white; }
@@ -53,6 +50,9 @@
         .badge.active { background: #dcfce7; color: #166534; }
         .badge.inactive { background: #fee2e2; color: #b91c1c; }
         .action-cell { display: flex; gap: 8px; flex-wrap: wrap; }
+        .icon-btn { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border: 1px solid #e2e8f0; background: white; color: #334155; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; cursor: pointer; }
+        .icon-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08); }
+        .icon-btn.delete:hover { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
         .empty-state { text-align: center; padding: 32px; color: #64748b; }
         .pagination { margin-top: 16px; }
         .pagination nav { display: flex; justify-content: center; }
@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="filter-actions">
-                    <button type="submit" class="btn btn-info">Filtrar</button>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
                     <a href="{{ route('personal.index') }}" class="btn btn-neutral">Limpiar</a>
                 </div>
             </form>
@@ -189,7 +189,7 @@
                                     <div class="action-cell">
                                         <button
                                             type="button"
-                                            class="btn btn-info"
+                                            class="icon-btn"
                                             data-modal-open
                                             data-personal="{{ e(json_encode([
                                                 'nombreCompleto' => trim($personal->nombre . ' ' . $personal->apellido),
@@ -206,11 +206,26 @@
                                                 'estado' => (int) $personal->estado === 1 ? 'Activo' : 'Inactivo',
                                             ])) }}"
                                         >
-                                            Ver
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+                                            </svg>
                                         </button>
-                                        <a href="{{ route('personal.editar', $personal->id) }}" class="btn btn-edit">Editar</a>
+                                        <a href="{{ route('personal.editar', $personal->id) }}" class="icon-btn" title="Editar">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M4 20h4l10.5-10.5-4-4L4 16v4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                <path d="m12.5 7.5 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                            </svg>
+                                        </a>
                                         @if((int) $personal->estado === 1)
-                                            <a href="{{ route('personal.eliminar', $personal->id) }}" class="btn btn-danger" onclick="return confirm('Se dara de baja a este registro. Deseas continuar?')">Baja</a>
+                                            <a href="{{ route('personal.eliminar', $personal->id) }}" class="icon-btn delete" title="Dar de baja" onclick="return confirm('Se dara de baja a este registro. Deseas continuar?')">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                    <path d="M4 7h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                    <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                                    <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                    <path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                                                </svg>
+                                            </a>
                                         @endif
                                     </div>
                                 </td>

@@ -4,67 +4,76 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
     <title>Configuración - Control de Asistencia</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; }
-        header { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); color: white; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .section { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); }
-        h2 { color: #8b5cf6; margin-bottom: 20px; }
-        .config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .config-card { background: #f9fafb; padding: 20px; border-radius: 8px; border-left: 4px solid #8b5cf6; }
-        .config-card h3 { color: #333; margin-bottom: 10px; }
-        .config-card p { color: #666; font-size: 13px; margin-bottom: 15px; }
-        .btn { background: #0284c7; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
-        .btn-danger { background: #dc2626; }
-        .link-back { display: inline-block; margin-top: 10px; color: #8b5cf6; text-decoration: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #0f172a; }
+        header { background: #ffffff; border-bottom: 1px solid #e2e8f0; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+        .hero { padding: 28px 0 20px; }
+        .hero h1 { font-size: 34px; margin-bottom: 8px; }
+        .hero p { color: #64748b; max-width: 720px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-top: 20px; }
+        .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 22px; padding: 22px; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06); }
+        .card span { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 14px; background: #f8fafc; margin-bottom: 14px; }
+        .card h2 { font-size: 20px; margin-bottom: 8px; }
+        .card p { color: #64748b; margin-bottom: 18px; min-height: 42px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 14px; text-decoration: none; font-weight: 600; border: 1px solid transparent; cursor: pointer; }
+        .btn-primary { background: #0f172a; color: white; }
+        .btn-danger { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+        .back-link { display: inline-flex; margin: 22px 0 36px; color: #475569; text-decoration: none; }
     </style>
 </head>
 <body>
     <header>
-        <h1>⚙️ Configuración del Sistema</h1>
+        <div class="container hero">
+            <h1>Configuracion</h1>
+            <p>Centraliza la administracion de sucursales, turnos laborales y calendario con una interfaz mas limpia y enfocada en operacion.</p>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="section">
-            <h2>Módulos de Configuración</h2>
-            <div class="config-grid">
-                <div class="config-card">
-                    <h3>🏢 Sucursales</h3>
-                    <p>Gestiona las sucursales o locales de la empresa</p>
-                    <a href="<?php echo e(route('configuracion.sucursales')); ?>" class="btn">Administrar</a>
-                </div>
-                <div class="config-card">
-                    <h3>⏰ Turnos Laborales</h3>
-                    <p>Define los turnos de trabajo y sus horarios</p>
-                    <a href="<?php echo e(route('configuracion.turnos')); ?>" class="btn">Administrar</a>
-                </div>
-                <div class="config-card">
-                    <h3>📅 Calendario Laboral</h3>
-                    <p>Configura días feriados y eventos</p>
-                    <a href="<?php echo e(route('configuracion.calendario')); ?>" class="btn">Administrar</a>
-                </div>
-                <div class="config-card">
-                    <h3>🔄 Base de Datos</h3>
-                    <p>Operaciones de mantenimiento de la BD</p>
-                    <button class="btn btn-danger" onclick="resetDB()">Reiniciar BD</button>
-                </div>
-            </div>
+    <main class="container">
+        <div class="grid">
+            <section class="card">
+                <span>🏢</span>
+                <h2>Sucursales</h2>
+                <p>Gestiona los puntos de operacion y su informacion principal.</p>
+                <a href="<?php echo e(route('configuracion.sucursales')); ?>" class="btn btn-primary">Administrar</a>
+            </section>
+
+            <section class="card">
+                <span>⏰</span>
+                <h2>Turnos laborales</h2>
+                <p>Configura horarios, tolerancia y dias de trabajo por sucursal.</p>
+                <a href="<?php echo e(route('configuracion.turnos')); ?>" class="btn btn-primary">Administrar</a>
+            </section>
+
+            <section class="card">
+                <span>📅</span>
+                <h2>Calendario laboral</h2>
+                <p>Administra feriados y eventos operativos de forma centralizada.</p>
+                <a href="<?php echo e(route('configuracion.calendario')); ?>" class="btn btn-primary">Administrar</a>
+            </section>
+
+            <section class="card">
+                <span>🧹</span>
+                <h2>Base de datos</h2>
+                <p>Ejecuta tareas de mantenimiento con confirmacion explicita.</p>
+                <button class="btn btn-danger" onclick="resetDB()">Reiniciar BD</button>
+            </section>
         </div>
 
-        <a href="<?php echo e(route('dashboard')); ?>" class="link-back">← Volver al Dashboard</a>
-    </div>
+        <a href="<?php echo e(route('dashboard')); ?>" class="back-link">← Volver al Dashboard</a>
+    </main>
 
     <script>
         const token = localStorage.getItem('auth_token');
         if (!token) window.location.href = '/login';
 
         function resetDB() {
-            if (!confirm('⚠️ ADVERTENCIA: Esto eliminará TODOS los datos. ¿Continuar?')) return;
-            
-            const password = prompt('Ingresa tu contraseña para confirmar:');
+            if (!confirm('ADVERTENCIA: Esto eliminara todos los datos. Deseas continuar?')) return;
+
+            const password = prompt('Ingresa tu contrasena para confirmar:');
             if (!password) return;
 
             fetch('<?php echo e(route('configuracion.reset')); ?>', {
@@ -81,8 +90,6 @@
             }).catch(e => alert('Error: ' + e.message));
         }
     </script>
-</body>
-</html>
 </body>
 </html>
 <?php /**PATH /workspace/resources/views/configuracion/index.blade.php ENDPATH**/ ?>
